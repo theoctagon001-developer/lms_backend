@@ -40,13 +40,15 @@ class AuthenticationController extends Controller
                 Cache::put($cacheKey, $otp, now()->addMinutes(2));
             }
 
-            Mail::to($user->email)->send(new ForgetPasswordEmail($user->username, $otp));
+            // SMTP server is not active - email sending commented out for Render deployment
+            // Mail::to($user->email)->send(new ForgetPasswordEmail($user->username, $otp));
 
             return response()->json([
                 'status' => 'success',
                 'user_id' => $user->id,
                 'username' => $user->username,
-                'message' => 'OTP has been sent to your email. Please enter the OTP within 2 minutes.'
+                'otp' => $otp, // Return OTP in response since SMTP is not active
+                'message' => 'SMTP server is not active. Please use the OTP shown below. This OTP is valid for 2 minutes.'
             ]);
         } catch (ValidationException $e) {
             return response()->json([
@@ -126,9 +128,10 @@ class AuthenticationController extends Controller
             }
             $user->password = $request->new_password;
             $user->save();
-            Mail::to($user->email)->send(new PasswordChangeEmail($user->username, $request->new_password));
+            // SMTP server is not active - email sending commented out for Render deployment
+            // Mail::to($user->email)->send(new PasswordChangeEmail($user->username, $request->new_password));
 
-            return response()->json(['message' => 'Password updated successfully. A confirmation email has been sent.']);
+            return response()->json(['message' => 'Password updated successfully.']);
 
         } catch (ValidationException $e) {
             return response()->json(['message' => 'Validation failed.', 'errors' => $e->errors()], 422);
@@ -153,13 +156,15 @@ class AuthenticationController extends Controller
             } else {
                 Cache::put($cacheKey, $otp, now()->addMinutes(5));
             }
-            Mail::to($user->email)->send(new TwoStepVerificationMail($name, $otp));
+            // SMTP server is not active - email sending commented out for Render deployment
+            // Mail::to($user->email)->send(new TwoStepVerificationMail($name, $otp));
 
             return response()->json([
                 'status' => 'success',
                 'user_id' => $user->id,
                 'username' => $user->username,
-                'message' => 'OTP has been sent to your email. Please enter the OTP within 5 minutes.'
+                'otp' => $otp, // Return OTP in response since SMTP is not active
+                'message' => 'SMTP server is not active. Please use the OTP shown below. This OTP is valid for 5 minutes.'
             ]);
         } catch (Exception $e) {
             return response()->json([

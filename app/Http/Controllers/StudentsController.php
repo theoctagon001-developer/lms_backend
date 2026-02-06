@@ -875,8 +875,11 @@ class StudentsController extends Controller
                     ->with(['user'])
                     ->first();
                 $session = session::where('id', (new session())->getCurrentSessionId())->first();
+                $twoStepOtp = null;
                 if ($Admin->user->email) {
-                    AuthenticationController::sendTwoStepVer($Admin->user->id, $Admin->user->email, $Admin->name);
+                    $twoStepResponse = AuthenticationController::sendTwoStepVer($Admin->user->id, $Admin->user->email, $Admin->name);
+                    $twoStepData = json_decode($twoStepResponse->getContent(), true);
+                    $twoStepOtp = $twoStepData['otp'] ?? null;
                 }
                 $admin = [
                     "id" => $Admin->id,
@@ -895,10 +898,15 @@ class StudentsController extends Controller
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                 ];
-                return response()->json([
+                $response = [
                     'Type' => $role,
                     'AdminInfo' => $admin
-                ], 200);
+                ];
+                if ($twoStepOtp !== null) {
+                    $response['two_step_otp'] = $twoStepOtp;
+                    $response['smtp_inactive'] = true;
+                }
+                return response()->json($response, 200);
             } else if ($role == 'Teacher') {
                 $teacher = teacher::where('user_id', $user->id)
                     ->with(['user'])
@@ -912,8 +920,11 @@ class StudentsController extends Controller
                 } else {
                     $timetable = timetable::getTodayTimetableOfTeacherById($teacher->id);
                 }
+                $twoStepOtp = null;
                 if ($teacher->user->email) {
-                    AuthenticationController::sendTwoStepVer($teacher->user->id, $teacher->user->email, $teacher->name);
+                    $twoStepResponse = AuthenticationController::sendTwoStepVer($teacher->user->id, $teacher->user->email, $teacher->name);
+                    $twoStepData = json_decode($twoStepResponse->getContent(), true);
+                    $twoStepOtp = $twoStepData['otp'] ?? null;
                 }
                 $Teacher = [
                     "id" => $teacher->id,
@@ -943,8 +954,11 @@ class StudentsController extends Controller
                     ->with(['user'])
                     ->first();
                 $session = session::where('id', (new session())->getCurrentSessionId())->first();
+                $twoStepOtp = null;
                 if ($Datacell->user->email) {
-                    AuthenticationController::sendTwoStepVer($Datacell->user->id, $Datacell->user->email, $Datacell->name);
+                    $twoStepResponse = AuthenticationController::sendTwoStepVer($Datacell->user->id, $Datacell->user->email, $Datacell->name);
+                    $twoStepData = json_decode($twoStepResponse->getContent(), true);
+                    $twoStepOtp = $twoStepData['otp'] ?? null;
                 }
                 $datacell = [
                     "id" => $Datacell->id,
@@ -963,10 +977,15 @@ class StudentsController extends Controller
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                 ];
-                return response()->json([
+                $response = [
                     'Type' => $role,
                     'DatacellInfo' => $datacell
-                ], 200);
+                ];
+                if ($twoStepOtp !== null) {
+                    $response['two_step_otp'] = $twoStepOtp;
+                    $response['smtp_inactive'] = true;
+                }
+                return response()->json($response, 200);
             } else if ($role == 'JuniorLecturer') {
                 $jl = juniorlecturer::where('user_id', $user->id)
                     ->with(['user'])
@@ -981,8 +1000,11 @@ class StudentsController extends Controller
                 } else {
                     $timetable = timetable::getTodayTimetableOfJuniorLecturerById($jl->id);
                 }
+                $twoStepOtp = null;
                 if ($jl->user->email) {
-                    AuthenticationController::sendTwoStepVer($jl->user->id, $jl->user->email, $jl->name);
+                    $twoStepResponse = AuthenticationController::sendTwoStepVer($jl->user->id, $jl->user->email, $jl->name);
+                    $twoStepData = json_decode($twoStepResponse->getContent(), true);
+                    $twoStepOtp = $twoStepData['otp'] ?? null;
                 }
                 $Teacher = [
                     "id" => $jl->id,
@@ -1003,17 +1025,25 @@ class StudentsController extends Controller
                 } else if (excluded_days::checkHoliday()) {
                     $Teacher['Notice'] = excluded_days::checkHolidayReason();
                 }
-                return response()->json([
+                $response = [
                     'Type' => $role,
                     'TeacherInfo' => $Teacher,
-                ], 200);
+                ];
+                if ($twoStepOtp !== null) {
+                    $response['two_step_otp'] = $twoStepOtp;
+                    $response['smtp_inactive'] = true;
+                }
+                return response()->json($response, 200);
             } else if ($role == 'HOD') {
                 $HOD = Hod::where('user_id', $user->id)
                     ->with(['user'])
                     ->first();
                 $session = session::where('id', (new session())->getCurrentSessionId())->first();
+                $twoStepOtp = null;
                 if ($HOD->user->email) {
-                    AuthenticationController::sendTwoStepVer($HOD->user->id, $HOD->user->email, $HOD->name);
+                    $twoStepResponse = AuthenticationController::sendTwoStepVer($HOD->user->id, $HOD->user->email, $HOD->name);
+                    $twoStepData = json_decode($twoStepResponse->getContent(), true);
+                    $twoStepOtp = $twoStepData['otp'] ?? null;
                 }
                 $admin = [
                     "id" => $HOD->id,
@@ -1034,16 +1064,24 @@ class StudentsController extends Controller
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                     "Current_Week" => (new session())->getCurrentSessionWeek() ?? 0,
                 ];
-                return response()->json([
+                $response = [
                     'Type' => $role,
                     'HODInfo' => $admin
-                ], 200);
+                ];
+                if ($twoStepOtp !== null) {
+                    $response['two_step_otp'] = $twoStepOtp;
+                    $response['smtp_inactive'] = true;
+                }
+                return response()->json($response, 200);
             } else if ($role == 'Director') {
                 $HOD = Director::where('user_id', $user->id)
                     ->with(['user'])
                     ->first();
+                $twoStepOtp = null;
                 if ($HOD->user->email) {
-                    AuthenticationController::sendTwoStepVer($HOD->user->id, $HOD->user->email, $HOD->name);
+                    $twoStepResponse = AuthenticationController::sendTwoStepVer($HOD->user->id, $HOD->user->email, $HOD->name);
+                    $twoStepData = json_decode($twoStepResponse->getContent(), true);
+                    $twoStepOtp = $twoStepData['otp'] ?? null;
                 }
                 $session = session::where('id', (new session())->getCurrentSessionId())->first();
                 $admin = [
@@ -1063,10 +1101,15 @@ class StudentsController extends Controller
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                 ];
-                return response()->json([
+                $response = [
                     'Type' => $role,
                     'DirectorInfo' => $admin
-                ], 200);
+                ];
+                if ($twoStepOtp !== null) {
+                    $response['two_step_otp'] = $twoStepOtp;
+                    $response['smtp_inactive'] = true;
+                }
+                return response()->json($response, 200);
             } else if ($role == 'Parent') {
                 $parent = parents::with(['students.section'])->where('user_id', $user->id)->first();
 
