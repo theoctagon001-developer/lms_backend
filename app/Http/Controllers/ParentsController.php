@@ -141,7 +141,7 @@ class ParentsController extends Controller
     }
     public function getGroupedParents()
     {
-        $students = Student::with(['section', 'parents'])->get();
+        $students = student::with(['section', 'parents'])->get();
 
         $data = $students->map(function ($student) {
             return [

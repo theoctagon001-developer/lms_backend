@@ -18,7 +18,7 @@ class Action extends Model
         if (!$student) {
             return false;
         }
-        $section = Section::find($student->section_id) ?? 0;
+        $section = section::find($student->section_id) ?? 0;
         if (!$section || !isset($section->semester)) {
             return false;
         }
@@ -56,7 +56,7 @@ class Action extends Model
             $failedSubjectsString .= $course->offeredCourse->course->name . " (" . $course->grade . "), ";
         }
         $failedSubjectsString = rtrim($failedSubjectsString, ', ');
-        Notification::create([
+        notification::create([
             'title' => 'Promotion Status',
             'description' => "Dropped : You are not eligible for promotion due to CGPA | failing courses: $failedSubjectsString",
             'url' => null,
@@ -378,7 +378,7 @@ class Action extends Model
 
                 return ["status" => "error", "issue" => "no section is created for this {$s} / {$RawDATA}"];
             }
-            $timetable = Timetable::firstOrCreate(
+            $timetable = timetable::firstOrCreate(
                 [
                     'session_id' => $sessionId,
                     'section_id' => $section_id,
@@ -406,7 +406,7 @@ class Action extends Model
     }
     public static function addOrUpdateUser($username, $password, $email, $roleType)
     {
-        $role = Role::where('type', $roleType)->first();
+        $role = role::where('type', $roleType)->first();
         if (!$role) {
             $role = role::create([
                 "type" => $roleType

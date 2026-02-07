@@ -96,7 +96,7 @@ class NotifyUpcomingTasks extends Command
                     continue;
                 }
 
-                $students = \App\Models\Student::select('student.id', 'student.name', 'student.RegNo')
+                $students = \App\Models\student::select('student.id', 'student.name', 'student.RegNo')
                     ->join('student_offered_courses', 'student.id', '=', 'student_offered_courses.student_id')
                     ->join('offered_courses', 'student_offered_courses.offered_course_id', '=', 'offered_courses.id')
                     ->where('student_offered_courses.section_id', $sectionId)

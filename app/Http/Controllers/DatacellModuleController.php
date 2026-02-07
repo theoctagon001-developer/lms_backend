@@ -231,7 +231,7 @@ class DatacellModuleController extends Controller
                         ];
                         continue;
                     }
-                    $courseRecord = course::where('code', $courseCode)
+                    $courseRecord = Course::where('code', $courseCode)
                         ->where('name', $courseName)
                         ->first();
 
@@ -1081,7 +1081,7 @@ class DatacellModuleController extends Controller
 
                     $username = strtolower(str_replace(' ', '', $name)) . $cnic . '@biit.edu';
                     $formattedDOB = (new DateTime($dateOfBirth))->format('Y-m-d');
-                    $teacher = Teacher::where('cnic', $cnic)->first();
+                    $teacher = teacher::where('cnic', $cnic)->first();
 
                     if ($teacher) {
                         $teacher->update([
@@ -1097,9 +1097,9 @@ class DatacellModuleController extends Controller
                         ];
                     } else {
                         $password = Action::generateUniquePassword($name);
-                        $role = Role::where('type', 'Teacher')->first();
+                        $role = role::where('type', 'Teacher')->first();
                         if (!$role) {
-                            $role = Role::create(["type" => 'Teacher']);
+                            $role = role::create(["type" => 'Teacher']);
                         }
 
                         $user = new user();
@@ -1117,7 +1117,7 @@ class DatacellModuleController extends Controller
                             continue;
                         }
 
-                        Teacher::create([
+                        teacher::create([
                             'user_id' => $userId,
                             'name' => $name,
                             'date_of_birth' => $formattedDOB,
@@ -1248,9 +1248,9 @@ class DatacellModuleController extends Controller
                         ];
                     } else {
                         $password = Action::generateUniquePassword($name);
-                        $role = Role::where('type', 'JuniorLecturer')->first();
+                        $role = role::where('type', 'JuniorLecturer')->first();
                         if (!$role) {
-                            $role = Role::create(["type" => 'JuniorLecturer']);
+                            $role = role::create(["type" => 'JuniorLecturer']);
                         }
 
                         $user = new user();
@@ -1583,7 +1583,7 @@ class DatacellModuleController extends Controller
                 $shortform = $singleRow['G'];
                 $lab = $singleRow['H'];
                 if (!isEmpty($program)) {
-                    $programId = Program::where('name', $program)->value('id');
+                    $programId = program::where('name', $program)->value('id');
                     if (!$programId) {
                         $status[] = ["status" => 'failed', "reason" => "The Field Program {$program} does not exist!"];
                         continue;
@@ -1706,18 +1706,18 @@ class DatacellModuleController extends Controller
             }
 
 
-            Grader::query()->update(['status' => 'in-active']);
+            grader::query()->update(['status' => 'in-active']);
             $status = [];
             foreach ($nonEmpty as $row) {
                 $regNo = $row['A'];
                 $name = $row['D'];
                 $type = $row['E'];
-                $studentId = Student::where('RegNo', $regNo)->value('id');
+                $studentId = student::where('RegNo', $regNo)->value('id');
                 if (!$studentId) {
                     $status[] = ["status" => 'failed', "reason" => "Student with RegNo {$regNo} not found."];
                     continue;
                 }
-                $grader = Grader::where('student_id', $studentId)->first();
+                $grader = grader::where('student_id', $studentId)->first();
                 if ($grader) {
                     $grader->update([
                         'type' => $type,
@@ -1730,7 +1730,7 @@ class DatacellModuleController extends Controller
                         'status' => 'active'
                     ]);
                 }
-                $teacherId = Teacher::where('name', $name)->value('id');
+                $teacherId = teacher::where('name', $name)->value('id');
                 if (!$teacherId) {
                     $status[] = ["status" => 'failed', "reason" => "Teacher with name {$name} not found."];
                     continue;
@@ -1879,7 +1879,7 @@ class DatacellModuleController extends Controller
                     ];
                     continue;
                 }
-                $teacherId = Teacher::where('name', $teacherName)->value('id');
+                $teacherId = teacher::where('name', $teacherName)->value('id');
                 if (!$teacherId) {
                     $faultydata[] = [
                         'status' => 'failed',
@@ -2684,7 +2684,7 @@ class DatacellModuleController extends Controller
     //     if (!$session_id) {
     //         return response()->json(['error' => 'Session ID is required.'], 400);
     //     }
-    //     $timetable = Timetable::with([
+    //     $timetable = timetable::with([
     //         'course:name,id,description',
     //         'teacher:name,id',
     //         'venue:venue,id',
@@ -2721,7 +2721,7 @@ class DatacellModuleController extends Controller
             return response()->json(['error' => 'Session ID is required.'], 400);
         }
         $session_name = (new session())->getSessionNameByID($session_id);
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:name,id,description',
             'teacher:name,id',
             'venue:venue,id',

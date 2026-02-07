@@ -144,8 +144,8 @@ class DatacellsController extends Controller
             $type = $request->input('type');
             $id = $request->input('id');
             $modelMap = [
-                'Admin' => Admin::class,
-                'Datacell' => Datacell::class,
+                'Admin' => admin::class,
+                'Datacell' => datacell::class,
                 'HOD' => Hod::class,
                 'Director' => Director::class,
             ];
@@ -166,7 +166,7 @@ class DatacellsController extends Controller
             $userId = $record->user_id;
 
             // Delete notifications sent by this user
-            Notification::where('TL_sender_id', $userId)->delete();
+            notification::where('TL_sender_id', $userId)->delete();
 
             // Delete role-specific record
             $record->delete();
@@ -218,8 +218,8 @@ class DatacellsController extends Controller
 
             // Resolve model class
             $modelMap = [
-                'Admin' => Admin::class,
-                'Datacell' => Datacell::class,
+                'Admin' => admin::class,
+                'Datacell' => datacell::class,
                 'HOD' => Hod::class,
                 'Director' => Director::class,
             ];
@@ -243,7 +243,7 @@ class DatacellsController extends Controller
             // Special case: HOD with program_name
             if ($type === 'HOD' && $request->has('program_name')) {
                 $programName = trim($request->input('program_name'));
-                $program = Program::where('name', $programName)->first();
+                $program = program::where('name', $programName)->first();
 
                 if (!$program) {
                     return response()->json([
@@ -318,7 +318,7 @@ class DatacellsController extends Controller
             };
 
             $data = [
-                'Datacell' => $transformUsers(Datacell::with('user')->get(), 'Datacell'),
+                'Datacell' => $transformUsers(datacell::with('user')->get(), 'Datacell'),
                 'Admin' => $transformUsers(admin::with('user')->get(), 'Admin'),
                 'HOD' => $transformUsers(Hod::with('user')->get(), 'HOD'),
                 'Director' => $transformUsers(Director::with('user')->get(), 'Director'),
@@ -435,7 +435,7 @@ class DatacellsController extends Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
-            $teacher = Teacher::findOrFail($request->input('teacher_id'));
+            $teacher = teacher::findOrFail($request->input('teacher_id'));
 
             $updatedData = [];
 
@@ -455,7 +455,7 @@ class DatacellsController extends Controller
             if ($request->has('cnic')) {
                 // Check for duplicate CNIC
                 $cnic = $request->input('cnic');
-                $existing = Teacher::where('cnic', $cnic)
+                $existing = teacher::where('cnic', $cnic)
                     ->where('id', '!=', $teacher->id)
                     ->exists();
                 if ($existing) {
@@ -529,7 +529,7 @@ class DatacellsController extends Controller
 
         try {
             // ✅ Step 2: Find section IDs in the given semester
-            $sections = Section::where('semester', $semester)->pluck('id');
+            $sections = section::where('semester', $semester)->pluck('id');
 
             if ($sections->isEmpty()) {
                 return response()->json([
@@ -578,12 +578,12 @@ class DatacellsController extends Controller
                 $status = 'Dropped';
 
                 if ($stu->cgpa >= $cgpaCriteria) {
-                    $nextSection = Section::where('program', $currentSection->program)
+                    $nextSection = section::where('program', $currentSection->program)
                         ->where('semester', $nextSemester)
                         ->first();
 
                     if (!$nextSection) {
-                        $nextSection = Section::create([
+                        $nextSection = section::create([
                             'program' => $currentSection->program,
                             'semester' => $nextSemester,
                             'group' => $currentSection->group ?? 'A',
@@ -671,7 +671,7 @@ class DatacellsController extends Controller
             'status'
         ]));
         if ($request->filled('program_name')) {
-            $program = Program::where('name', $request->program_name)->first();
+            $program = program::where('name', $request->program_name)->first();
             if (!$program) {
                 return response()->json([
                     'status' => false,
@@ -836,7 +836,7 @@ class DatacellsController extends Controller
             $student_RegNo = $request->student;
             $student = student::where('RegNo', $student_RegNo)->pluck('id')->first();
             $course_name = $request->course_name;
-            $course = course::where('name', $course_name)->pluck('id')->first();
+            $course = Course::where('name', $course_name)->pluck('id')->first();
             $session = $request->session;
             $section = $request->section;
             if (!$session) {
@@ -1737,7 +1737,7 @@ class DatacellsController extends Controller
                     $errorMessages[] = ["status" => 'failed', "reason" => "Failed to create or update user for {$name}."];
                     continue;
                 }
-                $teacher = Teacher::where('name', $name)->first();
+                $teacher = teacher::where('name', $name)->first();
                 if ($teacher) {
                     $teacher->update([
                         'user_id' => $userId,
@@ -1746,7 +1746,7 @@ class DatacellsController extends Controller
                     ]);
                     $successMessages[] = ["status" => 'success', "Logs" => "The teacher with Name: {$name} was updated."];
                 } else {
-                    Teacher::create([
+                    teacher::create([
                         'user_id' => $userId,
                         'name' => $name,
                         'date_of_birth' => $formattedDOB,
@@ -1929,7 +1929,7 @@ class DatacellsController extends Controller
                 $shortform = $singleRow['G'];
                 $lab = $singleRow['H'];
                 if (!isEmpty($program)) {
-                    $programId = Program::where('name', $program)->value('id');
+                    $programId = program::where('name', $program)->value('id');
                     if (!$programId) {
                         $status[] = ["status" => 'failed', "reason" => "The Field Program {$program} does not exist!"];
                         continue;
@@ -2162,18 +2162,18 @@ class DatacellsController extends Controller
             }
 
 
-            Grader::query()->update(['status' => 'in-active']);
+            grader::query()->update(['status' => 'in-active']);
             $status = [];
             foreach ($nonEmpty as $row) {
                 $regNo = $row['A'];
                 $name = $row['D'];
                 $type = $row['E'];
-                $studentId = Student::where('RegNo', $regNo)->value('id');
+                $studentId = student::where('RegNo', $regNo)->value('id');
                 if (!$studentId) {
                     $status[] = ["status" => 'failed', "reason" => "Student with RegNo {$regNo} not found."];
                     continue;
                 }
-                $grader = Grader::where('student_id', $studentId)->first();
+                $grader = grader::where('student_id', $studentId)->first();
                 if ($grader) {
                     $grader->update([
                         'type' => $type,
@@ -2186,7 +2186,7 @@ class DatacellsController extends Controller
                         'status' => 'active'
                     ]);
                 }
-                $teacherId = Teacher::where('name', $name)->value('id');
+                $teacherId = teacher::where('name', $name)->value('id');
                 if (!$teacherId) {
                     $status[] = ["status" => 'failed', "reason" => "Teacher with name {$name} not found."];
                     continue;
@@ -2328,7 +2328,7 @@ class DatacellsController extends Controller
                     ];
                     continue;
                 }
-                $teacherId = Teacher::where('name', $teacherName)->value('id');
+                $teacherId = teacher::where('name', $teacherName)->value('id');
                 if (!$teacherId) {
                     $faultydata[] = [
                         'status' => 'failed',
@@ -3065,7 +3065,7 @@ class DatacellsController extends Controller
         if (!$session_id) {
             return response()->json(['error' => 'Session ID is required.'], 400);
         }
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:name,id,description',
             'teacher:name,id',
             'venue:venue,id',

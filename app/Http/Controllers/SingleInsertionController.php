@@ -245,7 +245,7 @@ class SingleInsertionController extends Controller
                 'session_id' => 'required|integer'
             ]);
 
-            $program = Program::where('name', $request->program_name)->first();
+            $program = program::where('name', $request->program_name)->first();
             if (!$program) {
                 return response()->json(['error' => 'Program not found'], 404);
             }
@@ -311,7 +311,7 @@ class SingleInsertionController extends Controller
     {
         try {
 
-            $program = Program::where('name', $programName)->first();
+            $program = program::where('name', $programName)->first();
             $session_id = (new session())->getSessionIdByName($session);
             if (!$program || !$session_id) {
                 return response()->json(['error' => 'Program not found'], 404);
@@ -1604,7 +1604,7 @@ class SingleInsertionController extends Controller
                 ], 500);
             }
 
-            $teacher = Teacher::create([
+            $teacher = teacher::create([
                 'user_id' => $userId,
                 'name' => $name,
                 'date_of_birth' => $formattedDOB,
@@ -2145,7 +2145,7 @@ class SingleInsertionController extends Controller
                     } else {
                         $reciver = $request->reciever;
                     }
-                    $notification = Notification::create([
+                    $notification = notification::create([
                         'title' => $request->title,
                         'description' => $request->description,
                         'url' => $imageUrl ?? null,
@@ -2188,7 +2188,7 @@ class SingleInsertionController extends Controller
                 }
                 $Student_Section = $section_id;
             } else if ($request->reciever === 'student' && !$Student_Section && $request->has('TL_receiver_name')) {
-                $student = Student::where('name', $request->TL_receiver_name)->first();
+                $student = student::where('name', $request->TL_receiver_name)->first();
                 if (!$student) {
                     return response()->json(['message' => 'Student not found ' . $request->TL_receiver_name], 400);
                 }
@@ -2196,7 +2196,7 @@ class SingleInsertionController extends Controller
             } else
                 // If receiver is Teacher, find user_id from Teacher model
                 if ($request->reciever === 'teacher' && $request->has('TL_receiver_name')) {
-                    $teacher = Teacher::where('name', $request->TL_receiver_name)->first();
+                    $teacher = teacher::where('name', $request->TL_receiver_name)->first();
                     if (!$teacher) {
                         return response()->json(['message' => 'Teacher not found'], 400);
                     }
@@ -2213,7 +2213,7 @@ class SingleInsertionController extends Controller
                     }
 
             // Create and save the notification
-            $notification = Notification::create([
+            $notification = notification::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'url' => $imageUrl ?? null,
@@ -2258,7 +2258,7 @@ class SingleInsertionController extends Controller
             $designation = $request->input('Designation');
             $email = $request->input('email') ?? null;
             $password = $request->input('password');
-            $model = $role === 'Admin' ? Admin::class : Datacell::class;
+            $model = $role === 'Admin' ? admin::class : datacell::class;
             $directory = $role === 'Admin' ? 'Images/Admin' : 'Images/DataCell';
             $user = $model::find($id);
             if (!$user) {
@@ -2379,7 +2379,7 @@ class SingleInsertionController extends Controller
                 'role_id' => role::where('type', 'Student')->value('id')
             ]);
 
-            $student = Student::create([
+            $student = student::create([
                 'RegNo' => $regNo,
                 'name' => $name,
                 'cgpa' => $cgpa,

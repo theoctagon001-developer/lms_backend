@@ -760,7 +760,7 @@ class CourseContentContoller extends Controller
             ];
 
             // Check if a task with the same teacher_offered_course_id & coursecontent_id exists
-            $task = Task::where('teacher_offered_course_id', $teacher_offered_course_id)
+            $task = task::where('teacher_offered_course_id', $teacher_offered_course_id)
                 ->where('coursecontent_id', $coursecontent_id)
                 ->first();
 
@@ -768,7 +768,7 @@ class CourseContentContoller extends Controller
                 $task->update($taskData);
                 $response = ['status' => 'Task Already Allocated! Updated Successfully', 'task' => $task];
             } else {
-                $task = Task::create($taskData);
+                $task = task::create($taskData);
                 $response = ['status' => 'Task Allocated Successfully', 'task' => $task];
             }
 

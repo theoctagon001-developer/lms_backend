@@ -17,7 +17,7 @@ class JuniorLecturerHandling extends Model
         if (!(new session())->getCurrentSessionId()) {
             return [];
         }
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:name,id,description',
             'teacher:name,id',
             'venue:venue,id',
@@ -296,7 +296,7 @@ class JuniorLecturerHandling extends Model
             if (!$section) {
                 throw new Exception('No Section Found For this Task' . $section);
             }
-            $students = Student::select('student.id', 'student.name', 'student.RegNo')
+            $students = student::select('student.id', 'student.name', 'student.RegNo')
                 ->join('student_offered_courses', 'student.id', '=', 'student_offered_courses.student_id')
                 ->join('offered_courses', 'student_offered_courses.offered_course_id', '=', 'offered_courses.id')
                 ->where('student_offered_courses.section_id', $section)

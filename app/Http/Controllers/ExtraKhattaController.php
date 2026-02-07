@@ -58,7 +58,7 @@ class ExtraKhattaController extends Controller
 {
     public static function EligibleToEnroll($student_id, $section_id)
     {
-        $section = Section::find($section_id);
+        $section = section::find($section_id);
         if (!$section || !isset($section->semester)) {
             return false;
         }
@@ -404,7 +404,7 @@ class ExtraKhattaController extends Controller
             $offeredCourseId = $entry['offered_course_id'];
 
             // Check if section exists
-            $section = Section::find($sectionId);
+            $section = section::find($sectionId);
             if (!$section) {
                 $status[] = [
                     'section_id' => $sectionId,
@@ -417,7 +417,7 @@ class ExtraKhattaController extends Controller
             }
 
             // Check if teacher exists
-            $teacher = Teacher::find($teacherId);
+            $teacher = teacher::find($teacherId);
             if (!$teacher) {
                 $status[] = [
                     'section_id' => $sectionId,
@@ -493,7 +493,7 @@ class ExtraKhattaController extends Controller
             $offeredCourseId = $entry['offered_course_id'];
 
             // Check if section exists
-            $section = Section::find($sectionId);
+            $section = section::find($sectionId);
             if (!$section) {
                 $status[] = [
                     'section_id' => $sectionId,
@@ -506,7 +506,7 @@ class ExtraKhattaController extends Controller
             }
 
             // Check if teacher exists
-            $teacher = Teacher::find($teacherId);
+            $teacher = teacher::find($teacherId);
             if (!$teacher) {
                 $status[] = [
                     'section_id' => $sectionId,
@@ -815,9 +815,9 @@ class ExtraKhattaController extends Controller
             $graderId = $request->input('grader_id');
 
             // Check if Grader exists
-            $grader = Grader::find($graderId);
+            $grader = grader::find($graderId);
             if (!$grader) {
-                $grader = Grader::create([
+                $grader = grader::create([
                     'id' => $graderId,
                     'status' => 'active'
                 ]);
@@ -909,10 +909,10 @@ class ExtraKhattaController extends Controller
             if ($sessionId === (new session())->getCurrentSessionId()) {
                 $status = 'active';
             }
-            $grader = Grader::where('student_id', $graderId)->first();
+            $grader = grader::where('student_id', $graderId)->first();
 
             if (!$grader) {
-                $grader = Grader::create([
+                $grader = grader::create([
                     'student_id' => $graderId,
                     'status' => $status,
                     'type' => $type

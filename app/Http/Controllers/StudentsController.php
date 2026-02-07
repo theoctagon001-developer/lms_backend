@@ -904,7 +904,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $Admin->image ? asset($Admin->image) : null,
-                    "course_count" => course::count(),
+                    "course_count" => Course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
@@ -994,7 +994,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $Datacell->image ? asset($Datacell->image) : null,
-                    "course_count" => course::count(),
+                    "course_count" => Course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
@@ -1100,7 +1100,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $HOD->image ? asset($HOD->image) : null,
-                    "course_count" => course::count(),
+                    "course_count" => Course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
@@ -1149,7 +1149,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $HOD->image ? asset($HOD->image) : null,
-                    "course_count" => course::count(),
+                    "course_count" => Course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
@@ -1727,7 +1727,7 @@ class StudentsController extends Controller
                         $image = $datacell->image ? asset($datacell->image) : null;
                     }
                 } else if ($note->sender === 'Teacher') {
-                    $datacell = Teacher::where('user_id', $note->TL_sender_id)->first();
+                    $datacell = teacher::where('user_id', $note->TL_sender_id)->first();
                     if ($datacell) {
                         $senderName = $datacell->name ?? 'N/A';
                         $image = $datacell->image ? asset($datacell->image) : null;
@@ -1862,7 +1862,7 @@ class StudentsController extends Controller
                         $image = $datacell->image ? asset($datacell->image) : null;
                     }
                 } else if ($note->sender === 'Teacher') {
-                    $datacell = Teacher::where('user_id', $note->TL_sender_id)->first();
+                    $datacell = teacher::where('user_id', $note->TL_sender_id)->first();
                     if ($datacell) {
                         $senderName = $datacell->name ?? 'N/A';
                         $image = $datacell->image ? asset($datacell->image) : null;
@@ -1998,7 +1998,7 @@ class StudentsController extends Controller
             if (student_task_result::where('Student_id', $studentId)->where('Task_id', $taskId)->exists()) {
                 return response()->json(['error' => 'You have already submitted this quiz.'], 409);
             }
-            $task = Task::with(['teacherOfferedCourse', 'courseContent'])->findOrFail($taskId);
+            $task = task::with(['teacherOfferedCourse', 'courseContent'])->findOrFail($taskId);
             $obtainedMarks = self::calculateQuizMarks($answers, $task->courseContent->id, $task->points);
 
             // Store result
@@ -2019,7 +2019,7 @@ class StudentsController extends Controller
             $submissionCount = student_task_result::where('Task_id', $taskId)->count();
 
             if ($studentCount === $submissionCount) {
-                Task::ChangeStatusOfTask($taskId);
+                task::ChangeStatusOfTask($taskId);
             }
 
             return response()->json([
@@ -2051,15 +2051,15 @@ class StudentsController extends Controller
             if (student_task_submission::where('Student_id', $studentId)->where('Task_id', $taskId)->exists()) {
                 return response()->json(['error' => 'Submission already exists.'], 409);
             }
-            $student = Student::findOrFail($studentId);
-            $task = Task::with(['teacherOfferedCourse', 'courseContent'])->findOrFail($taskId);
+            $student = student::findOrFail($studentId);
+            $task = task::with(['teacherOfferedCourse', 'courseContent'])->findOrFail($taskId);
             if (strtoupper($task->courseContent->content) === 'MCQS') {
                 return response()->json(['error' => 'MCQ submissions are not allowed through this endpoint.'], 403);
             }
             $sessionId = (new session())->getCurrentSessionId();
             $sessionData = session::findOrFail($sessionId);
             $teacherOffered = teacher_offered_courses::findOrFail($task->teacher_offered_course_id);
-            $section = Section::findOrFail($teacherOffered->section_id);
+            $section = section::findOrFail($teacherOffered->section_id);
             $offeredCourse = offered_courses::with('course')->findOrFail($teacherOffered->offered_course_id);
             $fileName = "({$student->RegNo})-{$task->title}";
             $directoryPath = "{$sessionData->name}-{$sessionData->year}/{$section->program}-{$section->semester}{$section->group}/{$offeredCourse->course->description}/Task";
@@ -2098,8 +2098,8 @@ class StudentsController extends Controller
             if (student_task_submission::where('Student_id', $studentId)->where('Task_id', $taskId)->first()) {
                 throw new Exception('Submission Already Exsists');
             }
-            $student = Student::findOrFail($studentId);
-            $taskTitle = Task::findOrFail($taskId)->title;
+            $student = student::findOrFail($studentId);
+            $taskTitle = task::findOrFail($taskId)->title;
             $session = (new session())->getCurrentSessionId();
             $sessionIs = session::findOrFail($session);
             $sessionName = $sessionIs->name;
@@ -2111,7 +2111,7 @@ class StudentsController extends Controller
             $sectionId = $teacherOfferedCourse->section_id;
             $offeredcourse = offered_courses::where('id', $teacherOfferedCourse->offered_course_id)->with(['course'])->first();
             $course_name = $offeredcourse->course->description;
-            $section = Section::findOrFail($sectionId);
+            $section = section::findOrFail($sectionId);
             $taskSectionName = $section->program . '-' . $section->semester . $section->group;
             $taskTitle = $task->title;
             if ($task->courseContent->content == 'MCQS') {

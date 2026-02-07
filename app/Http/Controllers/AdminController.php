@@ -741,7 +741,7 @@ class AdminController extends Controller
 
         try {
             // Fetch teachers without graders assigned in the current session
-            $teachersWithoutGraders = Teacher::leftJoin('teacher_grader', function ($join) use ($currentSession) {
+            $teachersWithoutGraders = teacher::leftJoin('teacher_grader', function ($join) use ($currentSession) {
                 $join->on('teacher.id', '=', 'teacher_grader.teacher_id')
                     ->where('teacher_grader.session_id', '=', $currentSession);
             })
@@ -918,7 +918,7 @@ class AdminController extends Controller
             }
 
             // Find the student by RegNo
-            $studentId = Student::where('RegNo', $regNo)->value('id');
+            $studentId = student::where('RegNo', $regNo)->value('id');
             if (!$studentId) {
                 return response()->json([
                     'status' => 'failed',
@@ -927,7 +927,7 @@ class AdminController extends Controller
             }
 
             // Check if the grader already exists for the student
-            $grader = Grader::where('student_id', $studentId)->first();
+            $grader = grader::where('student_id', $studentId)->first();
             if ($grader) {
                 // Update existing grader
                 $grader->update([
@@ -936,7 +936,7 @@ class AdminController extends Controller
                 ]);
             } else {
                 // Create new grader if not found
-                $grader = Grader::create([
+                $grader = grader::create([
                     'student_id' => $studentId,
                     'type' => $type,
                     'status' => 'active'
@@ -944,7 +944,7 @@ class AdminController extends Controller
             }
 
             // Find the teacher by full name
-            $teacherId = Teacher::where('name', $teacherName)->value('id');
+            $teacherId = teacher::where('name', $teacherName)->value('id');
             if (!$teacherId) {
                 return response()->json([
                     'status' => 'failed',
@@ -1110,7 +1110,7 @@ class AdminController extends Controller
             $status = $request->input('status');
 
 
-            $program = Program::where('name', $name)->first();
+            $program = program::where('name', $name)->first();
 
             if ($program) {
                 // If the program exists, update it
@@ -1162,7 +1162,7 @@ class AdminController extends Controller
             $file = $request->file('image');
 
             // Fetch admin details
-            $admin = Admin::find($admin_id);
+            $admin = admin::find($admin_id);
             if (!$admin) {
                 throw new Exception("Admin not found");
             }
@@ -1363,7 +1363,7 @@ class AdminController extends Controller
     {
         try {
             $currentSessionId = (new session())->getCurrentSessionId();
-            $grades = Grader::with('student')
+            $grades = grader::with('student')
                 ->get()
                 ->map(function ($grader) use ($currentSessionId) {
                     $teacherGrader = teacher_grader::where('grader_id', $grader->id)
@@ -1406,7 +1406,7 @@ class AdminController extends Controller
     {
         try {
             $currentSessionId = (new session())->getCurrentSessionId();
-            $grades = Grader::with('student')
+            $grades = grader::with('student')
                 ->get()
                 ->map(function ($grader) use ($currentSessionId) {
                     $teacherGrader = teacher_grader::where('grader_id', $grader->id)
@@ -1454,7 +1454,7 @@ class AdminController extends Controller
                     'Unassigned Teachers' => [],
                 ], 200);
             }
-            $allTeachers = Teacher::all();
+            $allTeachers = teacher::all();
             $assignedTeacherIds = teacher_grader::where('session_id', $currentSessionId)
                 ->pluck('teacher_id')
                 ->toArray();
@@ -1565,12 +1565,12 @@ class AdminController extends Controller
             // Initialize an empty array for teachers
             $teachers = [];
             if ($request->user_id) {
-                $teachers = Teacher::where('user_id', $request->user_id)->first();
+                $teachers = teacher::where('user_id', $request->user_id)->first();
             } elseif ($request->name) {
                 // Fetch teachers by name
-                $teachers = Teacher::where('name', $request->name)->get();
+                $teachers = teacher::where('name', $request->name)->get();
             } else {
-                $teachers = Teacher::with(['user'])->get();
+                $teachers = teacher::with(['user'])->get();
             }
             foreach ($teachers as $teacher) {
                 $originalPath = $teacher->image; // Relative path to the image

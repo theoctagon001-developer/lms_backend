@@ -46,7 +46,7 @@ class task extends Model
     public function getSectionIdByTaskId($taskId): ?int
     {
         // Retrieve the task and chain the relationships to get section_id
-        $task = Task::with('teacherOfferedCourse.section') // Load teacherOfferedCourse and then section
+        $task = task::with('teacherOfferedCourse.section') // Load teacherOfferedCourse and then section
             ->where('id', $taskId) // Filter by task_id
             ->first();
         // Safely access teacherOfferedCourse and section using optional chaining

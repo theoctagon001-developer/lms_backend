@@ -28,7 +28,7 @@ class student_task_result extends Model
     }
     public static function storeOrUpdateResult($task_id, $student_RegNo, $obtainedMarks)
     {
-        $student = Student::where('RegNo', $student_RegNo)->first();
+        $student = student::where('RegNo', $student_RegNo)->first();
         if ($student) {
             $result = self::where('Task_id', $task_id)
                 ->where('Student_id', $student->id)

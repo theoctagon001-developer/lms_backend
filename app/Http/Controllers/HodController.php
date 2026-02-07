@@ -286,7 +286,7 @@ class HodController extends Controller
 
             // If program_name is provided, get its ID
             if (!empty($validated['program_name'])) {
-                $program = Program::where('name', $validated['program_name'])->first();
+                $program = program::where('name', $validated['program_name'])->first();
                 if (!$program) {
                     $course->program_id = null;
                 } else {
@@ -420,7 +420,7 @@ class HodController extends Controller
                 ], 500);
             }
 
-            $teacher = Teacher::create([
+            $teacher = teacher::create([
                 'user_id' => $userId,
                 'name' => $name,
                 'date_of_birth' => $formattedDOB,
@@ -957,7 +957,7 @@ class HodController extends Controller
             $sourceSessionName = $validated['source_session_id'];
             $destinationSessionName = $validated['destination_session_id'];
             $course = new Course();
-            $course = course::find($courseName);
+            $course = Course::find($courseName);
             if (!$course) {
                 return response()->json(['error' => 'Course not found.'], 404);
             }

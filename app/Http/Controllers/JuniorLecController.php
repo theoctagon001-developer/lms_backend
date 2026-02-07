@@ -436,7 +436,7 @@ class JuniorLecController extends Controller
             ];
 
             // Check if a task with the same teacher_offered_course_id & coursecontent_id exists
-            $task = Task::where('teacher_offered_course_id', $teacher_offered_course_id)
+            $task = task::where('teacher_offered_course_id', $teacher_offered_course_id)
                 ->where('coursecontent_id', $coursecontent_id)
                 ->first();
 
@@ -444,7 +444,7 @@ class JuniorLecController extends Controller
                 $task->update($taskData);
                 $response = ['status' => 'Task Already Allocated! Updated Successfully', 'task' => $task];
             } else {
-                $task = Task::create($taskData);
+                $task = task::create($taskData);
                 $response = ['status' => 'Task Allocated Successfully', 'task' => $task];
             }
 
@@ -927,7 +927,7 @@ class JuniorLecController extends Controller
                 $formattedDateTime = $item['start_time'];
                 $startDateTime = Carbon::createFromFormat('Y-m-d H:i', Carbon::now()->toDateString() . ' ' . $formattedDateTime)->format('Y-m-d H:i:s');
 
-                $attendanceMarked = Attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
+                $attendanceMarked = attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
                     ->where('date_time', $startDateTime)
                     ->exists();
 
@@ -1146,7 +1146,7 @@ class JuniorLecController extends Controller
 
         $currentDate = Carbon::now()->toDateString();
 
-        $classes = Timetable::join('venue', 'timetable.venue_id', '=', 'venue.id')
+        $classes = timetable::join('venue', 'timetable.venue_id', '=', 'venue.id')
             ->join('course', 'timetable.course_id', '=', 'course.id')
             ->join('session', 'timetable.session_id', '=', 'session.id')
             ->join('section', 'timetable.section_id', '=', 'section.id')
@@ -1198,7 +1198,7 @@ class JuniorLecController extends Controller
             $class->teacher_offered_course_id = $teacherOfferedCourse->id ?? null;
             $attendanceMarked = false;
             if ($teacherOfferedCourse) {
-                $attendanceMarked = Attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
+                $attendanceMarked = attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
                     ->where('date_time', $startDateTime)
                     ->exists();
             }
@@ -1634,7 +1634,7 @@ class JuniorLecController extends Controller
     //                 $task->update($taskData);
     //                 $insertedTasks[] = ['status' => 'Task is Already Allocated ! Just Updated the informations', 'task' => $task];
     //             } else {
-    //                 $task = Task::create($taskData);
+    //                 $task = task::create($taskData);
     //                 $insertedTasks[] = ['status' => 'Task Allocated Successfully', 'task' => $task];
     //             }
 
@@ -1767,7 +1767,7 @@ class JuniorLecController extends Controller
                 //     'teacher_offered_course_id' => $attendanceData['teacher_offered_course_id'],
                 //     'venue_id' => $attendanceData['venue_id'],
                 // ]);
-                Attendance::updateOrCreate(
+                attendance::updateOrCreate(
                     [
                         'date_time' => $attendanceData['date_time'],
                         'isLab' => $attendanceData['isLab'],

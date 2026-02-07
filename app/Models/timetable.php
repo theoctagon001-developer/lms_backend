@@ -78,7 +78,7 @@ class timetable extends Model
         if (!(new session())->getCurrentSessionId()) {
             return [];
         }
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:name,id,description',
             'teacher:name,id',
             'venue:venue,id',
@@ -117,7 +117,7 @@ class timetable extends Model
         if ($day) {
             $today = $day;
         }
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:name,id,description',
             'teacher:name,id',
             'venue:venue,id',
@@ -156,7 +156,7 @@ class timetable extends Model
         if (!$section_id) {
             return [];
         }
-        $Timetable = Timetable::with([
+        $Timetable = timetable::with([
             'course:name,id,description',
             'teacher:name,id',
             'venue:venue,id',
@@ -232,7 +232,7 @@ class timetable extends Model
         if ($day) {
             $today = $day;
         }
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:name,id,description',
             'teacher:name,id',
             'venue:venue,id',
@@ -289,7 +289,7 @@ class timetable extends Model
         if ($courseSectionMapping->isEmpty()) {
             return [];
         }
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:id,name,description,lab', // Include the 'lab' attribute
             'teacher:id,name',
             'venue:id,venue',
@@ -356,7 +356,7 @@ class timetable extends Model
         }
 
         // Fetch and group the timetable entries
-        $timetable = Timetable::with([
+        $timetable = timetable::with([
             'course:id,name,description,lab', // Include 'lab' attribute
             'teacher:id,name',
             'venue:id,venue',

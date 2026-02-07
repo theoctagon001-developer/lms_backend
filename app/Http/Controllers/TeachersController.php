@@ -236,7 +236,7 @@ class TeachersController extends Controller
             ]);
 
             // Find the task
-            $task = Task::findOrFail($request->task_id);
+            $task = task::findOrFail($request->task_id);
 
             // Update fields if provided
             if ($request->has('points')) {
@@ -393,7 +393,7 @@ class TeachersController extends Controller
             if (!$teacherId) {
                 return response()->json(['status' => false, 'message' => 'teacher_id is required'], 400);
             }
-            $teacher = Teacher::find($teacherId);
+            $teacher = teacher::find($teacherId);
             if (!$teacher) {
                 return response()->json(['status' => false, 'message' => 'Teacher not found'], 404);
             }
@@ -515,7 +515,7 @@ class TeachersController extends Controller
             $sourceSessionName = $validated['source_session_id'];
             $destinationSessionName = $validated['destination_session_id'];
             $course = new Course();
-            $course = course::find($courseName);
+            $course = Course::find($courseName);
             if (!$course) {
                 return response()->json(['error' => 'Course not found.'], 404);
             }
@@ -1126,7 +1126,7 @@ class TeachersController extends Controller
                 $formattedDateTime = $item['start_time'];
                 $startDateTime = Carbon::createFromFormat('Y-m-d H:i', Carbon::now()->toDateString() . ' ' . $formattedDateTime)->format('Y-m-d H:i:s');
 
-                $attendanceMarked = Attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
+                $attendanceMarked = attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
                     ->where('date_time', $startDateTime)
                     ->exists();
 
@@ -1224,7 +1224,7 @@ class TeachersController extends Controller
     //             $formattedDateTime = $item['start_time'];
     //             $startDateTime = Carbon::createFromFormat('Y-m-d H:i', Carbon::now()->toDateString() . ' ' . $formattedDateTime)->format('Y-m-d H:i:s');
 
-    //             $attendanceMarked = Attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
+    //             $attendanceMarked = attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
     //                 ->where('date_time', $startDateTime)
     //                 ->exists();
 
@@ -1274,7 +1274,7 @@ class TeachersController extends Controller
         $currentSessionId = (new session())->getCurrentSessionId();
 
         // Fetch today's classes directly using Eloquent with relationships
-        $classes = Timetable::with(['venue', 'course', 'section.program', 'dayslot'])
+        $classes = timetable::with(['venue', 'course', 'section.program', 'dayslot'])
             ->where('teacher_id', $teacherId)
             ->whereHas('dayslot', function ($q) use ($currentDay) {
                 $q->where('day', $currentDay);
@@ -1317,7 +1317,7 @@ class TeachersController extends Controller
             $attendanceMarked = false;
             if ($teacherOfferedCourse) {
                 $startDateTime = Carbon::parse($currentDate . ' ' . $class->dayslot->start_time)->toDateTimeString();
-                $attendanceMarked = Attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
+                $attendanceMarked = attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
                     ->where('date_time', $startDateTime)
                     ->exists();
             }
@@ -1363,7 +1363,7 @@ class TeachersController extends Controller
     //         $currentDay = excluded_days::checkRescheduleDay();
     //     }
     //     $currentDate = Carbon::now()->toDateString();
-    //     $classes = Timetable::join('venue', 'timetable.venue_id', '=', 'venue.id')
+    //     $classes = timetable::join('venue', 'timetable.venue_id', '=', 'venue.id')
     //         ->join('course', 'timetable.course_id', '=', 'course.id')
     //         ->join('session', 'timetable.session_id', '=', 'session.id')
     //         ->join('section', 'timetable.section_id', '=', 'section.id')
@@ -1416,7 +1416,7 @@ class TeachersController extends Controller
     //         $class->teacher_offered_course_id = $teacherOfferedCourse->id ?? null;
     //         $attendanceMarked = false;
     //         if ($teacherOfferedCourse) {
-    //             $attendanceMarked = Attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
+    //             $attendanceMarked = attendance::where('teacher_offered_course_id', $teacherOfferedCourse->id)
     //                 ->where('date_time', $startDateTime)
     //                 ->exists();
     //         }
@@ -3087,7 +3087,7 @@ class TeachersController extends Controller
             $teacher_id = $request->teacher_id;
             $email = $request->email;
 
-            $teacher = Teacher::find($teacher_id);
+            $teacher = teacher::find($teacher_id);
             $user = user::find($teacher->user_id);
             if (!$teacher) {
                 throw new Exception("Teacher not found");
@@ -3124,7 +3124,7 @@ class TeachersController extends Controller
             $teacher_id = $request->teacher_id;
             $file = $request->file('image');
 
-            $teacher = Teacher::find($teacher_id);
+            $teacher = teacher::find($teacher_id);
             if (!$teacher) {
                 $teacher = juniorLecturer::find($teacher_id);
                 if (!$teacher) {
