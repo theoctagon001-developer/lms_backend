@@ -35,7 +35,7 @@ use Laravel\Pail\Options;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use App\Models\attendance;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -515,7 +515,7 @@ class TeachersController extends Controller
             $sourceSessionName = $validated['source_session_id'];
             $destinationSessionName = $validated['destination_session_id'];
             $course = new Course();
-            $course = Course::find($courseName);
+            $course = course::find($courseName);
             if (!$course) {
                 return response()->json(['error' => 'Course not found.'], 404);
             }
@@ -830,7 +830,7 @@ class TeachersController extends Controller
                         $taskDetails['creator_name'] = $juniorLecturer->name ?? 'Unknown';
                     }
                     $offeredCourse = offered_courses::where('id', $teacherOfferedCourse->offered_course_id)->first();
-                    $course = $offeredCourse ? Course::where('id', $offeredCourse->course_id)->first() : null;
+                    $course = $offeredCourse ? course::where('id', $offeredCourse->course_id)->first() : null;
                     $taskDetails['course_name'] = $course->name ?? 'Unknown';
                     $groupedTasks[$task->type]['tasks'][] = $taskDetails;
                     $groupedTasks[$task->type]['total_marks'] += $task->points;
@@ -950,7 +950,7 @@ class TeachersController extends Controller
                     $taskDetails['creator_name'] = $juniorLecturer->name ?? 'Unknown';
                 }
                 $offeredCourse = offered_courses::where('id', $teacherOfferedCourse->offeredCourse->id)->first();
-                $course = $offeredCourse ? Course::where('id', $offeredCourse->course_id)->first() : null;
+                $course = $offeredCourse ? course::where('id', $offeredCourse->course_id)->first() : null;
                 $taskDetails['course_name'] = $course->name ?? 'Unknown';
                 $groupedTasks[$task->type]['tasks'][] = $taskDetails;
                 $groupedTasks[$task->type]['total_marks'] += $task->points;
@@ -2066,7 +2066,7 @@ class TeachersController extends Controller
             $dueDate = $validatedData['due_date'];
             $coursecontent_id = $validatedData['coursecontent_id'];
             $sections = explode(',', $sectionInfo);
-            $course = Course::where('name', $courseName)->first();
+            $course = course::where('name', $courseName)->first();
 
             if (!$course) {
                 return response()->json([

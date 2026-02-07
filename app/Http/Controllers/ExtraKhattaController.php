@@ -14,7 +14,7 @@ use App\Models\user;
 use App\Models\topic;
 use App\Models\venue;
 use App\Models\Action;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\grader;
 use App\Models\dayslot;
 use App\Models\program;
@@ -343,7 +343,7 @@ class ExtraKhattaController extends Controller
         $status = [];
         foreach ($courses as $course) {
             // Check if course exists
-            $courseRecord = Course::find($course['course_id']);
+            $courseRecord = course::find($course['course_id']);
             if (!$courseRecord) {
                 $status[] = [
                     'course_id' => $course['course_id'],

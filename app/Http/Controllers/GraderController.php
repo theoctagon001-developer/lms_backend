@@ -5,7 +5,7 @@ use App\Models\FileHandler;
 use App\Models\teacher;
 use Illuminate\Support\Facades\Storage;
 use App\Models\attendance;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\grader;
 use App\Models\grader_task;
 use App\Models\notification;

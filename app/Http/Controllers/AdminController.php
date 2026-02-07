@@ -13,7 +13,7 @@ use App\Models\admin;
 use App\Models\topic;
 use Dotenv\Validator;
 use App\Models\Action;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\grader;
 use App\Models\program;
 use App\Models\section;
@@ -553,13 +553,13 @@ class AdminController extends Controller
             // Check if specific filters are provided in the request and apply them
             if ($request->code) {
                 // Search by course code
-                $courses = Course::where('code', $request->code)->select('id', 'code', 'name', 'credit_hours', 'pre_req_main', 'lab')->get();
+                $courses = course::where('code', $request->code)->select('id', 'code', 'name', 'credit_hours', 'pre_req_main', 'lab')->get();
             } else if ($request->name) {
                 // Search by course name
-                $courses = Course::where('name', $request->name)->select('id', 'code', 'name', 'credit_hours', 'pre_req_main', 'lab')->get();
+                $courses = course::where('name', $request->name)->select('id', 'code', 'name', 'credit_hours', 'pre_req_main', 'lab')->get();
             } else {
                 // If no filters are provided, get all courses with only the necessary fields
-                $courses = Course::get();
+                $courses = course::get();
             }
 
             foreach ($courses as $course) {
@@ -1038,7 +1038,7 @@ class AdminController extends Controller
 
             // Handle the pre-requisite course if it exists
             if ($preReqMain) {
-                $preReqId = Course::where('name', $preReqMain)->value('id');
+                $preReqId = course::where('name', $preReqMain)->value('id');
                 if (!$preReqId) {
                     return response()->json([
                         'status' => 'failed',
@@ -1049,7 +1049,7 @@ class AdminController extends Controller
                 $preReqId = null;
             }
 
-            $course = Course::where('name', $name)->where('code', $code)->first();
+            $course = course::where('name', $name)->where('code', $code)->first();
 
             $dataToSave = [
                 'code' => $code,
@@ -1069,7 +1069,7 @@ class AdminController extends Controller
                     'message' => "The course with Name: {$name} and Code: {$code} was updated successfully."
                 ], 200);
             } else {
-                Course::create($dataToSave);
+                course::create($dataToSave);
                 return response()->json([
                     'status' => 'success',
                     'message' => "The course with Name: {$name} and Code: {$code} was added successfully."

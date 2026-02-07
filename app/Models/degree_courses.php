@@ -21,7 +21,7 @@ class degree_courses extends Model
     }
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_id', 'id');
+        return $this->belongsTo(course::class, 'course_id', 'id');
     }
     public function session()
     {

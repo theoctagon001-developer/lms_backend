@@ -26,7 +26,7 @@ use Exception;
 use App\Models\user;
 use App\Models\admin;
 use App\Models\Action;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\teacher;
 use App\Models\datacell;
 use App\Models\date_sheet;
@@ -319,7 +319,7 @@ class SingleInsertionController extends Controller
 
             $degreeCourses = degree_courses::where('program_id', $program->id)->where('session_id', $session_id)->get();
             $courses = $degreeCourses->map(function ($entry) {
-                $course = Course::find($entry->course_id);
+                $course = course::find($entry->course_id);
                 return [
                     'semester' => $entry->semester,
                     'course_name' => $course->name ?? '',
@@ -560,7 +560,7 @@ class SingleInsertionController extends Controller
                 $offeredCourseIds = offered_courses::where('session_id', $session->id)
                     ->pluck('course_id');
 
-                $unofferedCourses = Course::whereNotIn('id', $offeredCourseIds)->get();
+                $unofferedCourses = course::whereNotIn('id', $offeredCourseIds)->get();
                 $totalOfferedCount = $offeredCourseIds->count();
 
                 $sessionEntry = [

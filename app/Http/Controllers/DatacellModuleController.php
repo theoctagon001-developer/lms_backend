@@ -30,7 +30,7 @@ use Laravel\Pail\Options;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use App\Models\attendance;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -231,7 +231,7 @@ class DatacellModuleController extends Controller
                         ];
                         continue;
                     }
-                    $courseRecord = Course::where('code', $courseCode)
+                    $courseRecord = course::where('code', $courseCode)
                         ->where('name', $courseName)
                         ->first();
 
@@ -1593,13 +1593,13 @@ class DatacellModuleController extends Controller
                 }
                 $preReqId = null;
                 if ($preReqMain !== null && !isEmpty($preReqMain) && $preReqId != '') {
-                    $preReqId = Course::where('name', $preReqMain)->value('id');
+                    $preReqId = course::where('name', $preReqMain)->value('id');
                     if (!$preReqId) {
                         $status[] = ["status" => 'failed', "reason" => "The prerequisite course {$preReqMain} does not exist!"];
                         continue;
                     }
                 }
-                $course = Course::where('name', $name)->where('code', $code)->first();
+                $course = course::where('name', $name)->where('code', $code)->first();
                 $dataToUpdate = [
                     'code' => $code,
                     'credit_hours' => $creditHours,
@@ -1620,7 +1620,7 @@ class DatacellModuleController extends Controller
                 } else {
                     $dataToCreate = $dataToUpdate;
                     $dataToCreate['name'] = $name;
-                    Course::create($dataToCreate);
+                    course::create($dataToCreate);
                     $status[] = ["status" => 'success', "Logs" => "The course with Name: {$name} was added."];
                 }
             }
@@ -1845,7 +1845,7 @@ class DatacellModuleController extends Controller
                 $courseTitle = trim($row['B']);
                 $juniorLecturerName = trim($row['C']);
                 $teacherName = trim($row['D']);
-                $courseId = Course::where('name', $courseTitle)->value('id');
+                $courseId = course::where('name', $courseTitle)->value('id');
                 if (!$courseId) {
                     $faultydata[] = [
                         'status' => 'failed',
@@ -1853,7 +1853,7 @@ class DatacellModuleController extends Controller
                     ];
                     continue;
                 }
-                $course = Course::find($courseId);
+                $course = course::find($courseId);
                 if (!$course->lab) {
                     $faultydata[] = [
                         'status' => 'failed',

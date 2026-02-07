@@ -56,7 +56,7 @@ class timetable extends Model
     // Relationship to the Course model
     public function course()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(course::class);
     }
 
     // Relationship to the Teacher model (nullable)

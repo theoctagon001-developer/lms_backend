@@ -16,7 +16,7 @@ use App\Models\admin;
 use App\Models\topic;
 use App\Models\venue;
 use App\Models\Action;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\grader;
 use App\Models\dayslot;
 use App\Models\program;
@@ -1564,7 +1564,7 @@ class JuniorLecController extends Controller
     //         $dueDate = $validatedData['due_date'];
     //         $coursecontent_id = $validatedData['coursecontent_id'];
     //         $sections = explode(',', $sectionInfo);
-    //         $course = Course::where('name', $courseName)->first();
+    //         $course = course::where('name', $courseName)->first();
     //         if (!$course) {
     //             return response()->json([
     //                 'status' => 'error',

@@ -326,7 +326,7 @@ class Action extends Model
             $juniorLecturerName = null;
         }
 
-        $course = Course::where('description', $course)->first();
+        $course = course::where('description', $course)->first();
         if (!$course) {
             return ["status" => "error", "issue" => "no course exsist for this {$course} / {$RawDATA}"];
         }

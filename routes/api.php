@@ -3,7 +3,7 @@ use App\Http\Controllers\AllControlsController;
 use App\Http\Controllers\TaskController;
 use App\Models\degree_courses;
 use App\Models\Hod;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\parents;
 use App\Models\program;
 use App\Models\section;
@@ -249,10 +249,10 @@ Route::prefix('Dropdown')->group(function () {
         return juniorlecturer::all('name')->pluck('name');
     });
     Route::get('/AllCourse', function () {
-        return Course::all('name')->pluck('name');
+        return course::all('name')->pluck('name');
     });
     Route::get('/AllCourseData', function () {
-        $offeredCourses = Course::get()
+        $offeredCourses = course::get()
             ->map(function ($course) {
                 return [
                     'id' => $course->id,

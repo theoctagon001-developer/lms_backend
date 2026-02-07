@@ -36,7 +36,7 @@ class restricted_parent_courses extends Model
     // Course relationship
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->belongsTo(course::class, 'course_id');
     }
     public static function insertOne(int $parentId, int $studentId, int $courseId, string $restrictionType = 'core'): ?self
     {

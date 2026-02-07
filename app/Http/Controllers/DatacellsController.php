@@ -31,7 +31,7 @@ use GrahamCampbell\ResultType\Success;
 use Laravel\Pail\Options;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\attendance;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -744,7 +744,7 @@ class DatacellsController extends Controller
         try {
             $course_name = $request->course_name;
             if ($course_name) {
-                $course_id = Course::where('name', $course_name)->pluck('id')->first();
+                $course_id = course::where('name', $course_name)->pluck('id')->first();
                 if ($course_id) {
                     $offered_course = offered_courses::where('course_id', $course_id)->where('session_id', (new session())->getCurrentSessionId())->first();
                     if ($offered_course) {
@@ -836,7 +836,7 @@ class DatacellsController extends Controller
             $student_RegNo = $request->student;
             $student = student::where('RegNo', $student_RegNo)->pluck('id')->first();
             $course_name = $request->course_name;
-            $course = Course::where('name', $course_name)->pluck('id')->first();
+            $course = course::where('name', $course_name)->pluck('id')->first();
             $session = $request->session;
             $section = $request->section;
             if (!$session) {
@@ -1939,13 +1939,13 @@ class DatacellsController extends Controller
                 }
                 $preReqId = null;
                 if ($preReqMain !== null && !isEmpty($preReqMain) && $preReqId != '') {
-                    $preReqId = Course::where('name', $preReqMain)->value('id');
+                    $preReqId = course::where('name', $preReqMain)->value('id');
                     if (!$preReqId) {
                         $status[] = ["status" => 'failed', "reason" => "The prerequisite course {$preReqMain} does not exist!"];
                         continue;
                     }
                 }
-                $course = Course::where('name', $name)->where('code', $code)->first();
+                $course = course::where('name', $name)->where('code', $code)->first();
                 $dataToUpdate = [
                     'code' => $code,
                     'credit_hours' => $creditHours,
@@ -1966,7 +1966,7 @@ class DatacellsController extends Controller
                 } else {
                     $dataToCreate = $dataToUpdate;
                     $dataToCreate['name'] = $name;
-                    Course::create($dataToCreate);
+                    course::create($dataToCreate);
                     $status[] = ["status" => 'success', "Logs" => "The course with Name: {$name} was added."];
                 }
             }
@@ -2301,7 +2301,7 @@ class DatacellsController extends Controller
                 $courseTitle = trim($row['B']);
                 $juniorLecturerName = trim($row['C']);
                 $teacherName = trim($row['D']);
-                $courseId = Course::where('name', $courseTitle)->value('id');
+                $courseId = course::where('name', $courseTitle)->value('id');
                 if (!$courseId) {
                     $faultydata[] = [
                         'status' => 'failed',

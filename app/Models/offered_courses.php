@@ -21,7 +21,7 @@ class offered_courses extends Model
     // Define relationships with Course and Session models
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_id', 'id');
+        return $this->belongsTo(course::class, 'course_id', 'id');
     }
     public function session()
     {

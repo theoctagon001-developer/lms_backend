@@ -34,7 +34,7 @@ use App\Models\teacher;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\attendance;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -904,7 +904,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $Admin->image ? asset($Admin->image) : null,
-                    "course_count" => Course::count(),
+                    "course_count" => course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
@@ -994,7 +994,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $Datacell->image ? asset($Datacell->image) : null,
-                    "course_count" => Course::count(),
+                    "course_count" => course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
@@ -1100,7 +1100,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $HOD->image ? asset($HOD->image) : null,
-                    "course_count" => Course::count(),
+                    "course_count" => course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
@@ -1149,7 +1149,7 @@ class StudentsController extends Controller
                     "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
                     "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $HOD->image ? asset($HOD->image) : null,
-                    "course_count" => Course::count(),
+                    "course_count" => course::count(),
                     "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),

@@ -552,7 +552,7 @@ class StudentManagement extends Model
                     }
 
                     $offeredCourse = offered_courses::where('id', $teacherOfferedCourse->offered_course_id)->first();
-                    $course = $offeredCourse ? Course::where('id', $offeredCourse->course_id)->first() : null;
+                    $course = $offeredCourse ? course::where('id', $offeredCourse->course_id)->first() : null;
                     $taskDetails['course_name'] = $course->name ?? 'Unknown';
                     if ($task->start_date > $currentDate) {
                         $remainingTime = $currentDate->diff($task->start_date);
@@ -665,7 +665,7 @@ class StudentManagement extends Model
                     $taskDetails['creator_name'] = $juniorLecturer->name ?? 'Unknown';
                 }
                 $offeredCourse = offered_courses::where('id', $teacherOfferedCourse->offered_course_id)->first();
-                $course = $offeredCourse ? Course::where('id', $offeredCourse->course_id)->first() : null;
+                $course = $offeredCourse ? course::where('id', $offeredCourse->course_id)->first() : null;
                 $taskDetails['course_name'] = $course->name ?? 'Unknown';
                 $groupedTasks[$task->type]['tasks'][] = $taskDetails;
                 $groupedTasks[$task->type]['total_marks'] += $task->points;
@@ -859,7 +859,7 @@ class StudentManagement extends Model
                     $teacherName = $teacher ? $teacher->name : null;
 
                 }
-                $course = Course::where('id', $offeredCourse->course_id)->first();
+                $course = course::where('id', $offeredCourse->course_id)->first();
                 $courseDetails = [
                     'course_name' => $course->name,
                     'course_code' => $course->code,
@@ -868,7 +868,7 @@ class StudentManagement extends Model
                     'Is' => $course->lab == 1 ? 'Lab' : 'Theory',
                     'Short Form' => $course->description,
                     'Pre-Requisite/Main' => $course->pre_req_main == null
-                        ? 'Main' : Course::where('id', $course->pre_req_main)->value('name'),
+                        ? 'Main' : course::where('id', $course->pre_req_main)->value('name'),
                     'section' => (new section())->getNameByID($enrolledCourse->section_id),
                     'program' => $course->program
                         ? program::where('id', $course->program_id)->value('name')
@@ -933,7 +933,7 @@ class StudentManagement extends Model
                     $teacherName = $teacher ? $teacher->name : null;
 
                 }
-                $course = Course::where('id', $offeredCourse->course_id)->first();
+                $course = course::where('id', $offeredCourse->course_id)->first();
                 $courseDetails = [
                     'course_name' => $course->name,
                     'course_code' => $course->code,
@@ -942,7 +942,7 @@ class StudentManagement extends Model
                     'Is' => $course->lab == 1 ? 'Lab' : 'Theory',
                     'Short Form' => $course->description,
                     'Pre-Requisite/Main' => $course->pre_req_main == null
-                        ? 'Main' : Course::where('id', $course->pre_req_main)->value('name'),
+                        ? 'Main' : course::where('id', $course->pre_req_main)->value('name'),
                     'section' => (new section())->getNameByID($enrolledCourse->section_id),
                     'program' => $course->program
                         ? program::where('id', $course->program_id)->value('name')
@@ -998,7 +998,7 @@ class StudentManagement extends Model
 
                 }
 
-                $course = Course::where('id', $offeredCourse->course_id)->first();
+                $course = course::where('id', $offeredCourse->course_id)->first();
                 $subjectResult = subjectresult::where('student_offered_course_id', $enrolledCourse->id)->first();
                 if ($subjectResult) {
                     $result = $enrolledCourse->grade == 'F' ? 'Failed' : $subjectResult;
@@ -1013,7 +1013,7 @@ class StudentManagement extends Model
                     'Short Form' => $course->description,
                     'Is' => $course->lab == 1 ? 'Lab' : 'Theory',
                     'Pre-Requisite/Main' => $course->pre_req_main == null
-                        ? 'Main' : Course::where('id', $course->pre_req_main)->value('name'),
+                        ? 'Main' : course::where('id', $course->pre_req_main)->value('name'),
                     'section' => (new section())->getNameByID($enrolledCourse->section_id),
                     'session_name' => $session->name . '-' . $session->year,
                     'session_start' => $session->start_date,

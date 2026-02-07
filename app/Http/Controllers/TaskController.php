@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\offered_courses;
 use App\Models\section;
 use App\Models\session;
@@ -255,7 +255,7 @@ class TaskController extends Controller
                     $regno = $enroll->student->RegNo;
                     $honor_section = (new section())->getNameByID($enroll->section_id);
                     $regular_section = (new section())->getNameByID($enroll->student->section_id);
-                    $course = Course::where('id', $enroll->offeredCourse->course_id)->first();
+                    $course = course::where('id', $enroll->offeredCourse->course_id)->first();
                     $course_name = $course->name;
 
                     $enroll->section_id = $student_regular_section_id;
@@ -375,7 +375,7 @@ class TaskController extends Controller
                     $regno = $enroll->student->RegNo;
                     $honor_section = (new section())->getNameByID($enroll->section_id);
                     $regular_section = (new section())->getNameByID($enroll->student->section_id);
-                    $course = Course::where('id', $enroll->offeredCourse->course_id)->first();
+                    $course = course::where('id', $enroll->offeredCourse->course_id)->first();
                     $course_name = $course->name;
 
                     $enroll->section_id = $student_regular_section_id;

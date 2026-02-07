@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Course extends Model
+class course extends Model
 {
     protected $table = 'course'; // Explicit table name
     public $timestamps = false; // Disable timestamps
@@ -40,7 +40,7 @@ class Course extends Model
      */
     public function prerequisite()
     {
-        return $this->belongsTo(Course::class, 'pre_req_main', 'id');
+        return $this->belongsTo(course::class, 'pre_req_main', 'id');
     }
 
     /**

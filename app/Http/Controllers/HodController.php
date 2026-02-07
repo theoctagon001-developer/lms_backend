@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Action;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\coursecontent;
 use App\Models\coursecontent_topic;
 use App\Models\datacell;
@@ -197,7 +197,7 @@ class HodController extends Controller
             ]);
 
             // Check if course with the exact code + name already exists
-            $exists = Course::where('code', $validated['code'])
+            $exists = course::where('code', $validated['code'])
                 ->where('name', $validated['name'])
                 ->exists();
 
@@ -220,11 +220,11 @@ class HodController extends Controller
             // Get prerequisite course ID if valid code is provided
             $preReqId = null;
             if (!empty($validated['pre_req_code'])) {
-                $preReqId = Course::where('code', $validated['pre_req_code'])->value('id');
+                $preReqId = course::where('code', $validated['pre_req_code'])->value('id');
             }
 
             // Create new course
-            $course = Course::create([
+            $course = course::create([
                 'code' => $validated['code'],
                 'name' => $validated['name'],
                 'credit_hours' => $validated['credit_hours'],
@@ -275,7 +275,7 @@ class HodController extends Controller
             ]);
 
             // Retrieve course to update
-            $course = Course::find($validated['course_id']);
+            $course = course::find($validated['course_id']);
 
             if (!$course) {
                 return response()->json([
@@ -297,7 +297,7 @@ class HodController extends Controller
 
             // If pre_req_code is provided, get its ID
             if (!empty($validated['pre_req_code'])) {
-                $preReqId = Course::where('code', $validated['pre_req_code'])->value('id');
+                $preReqId = course::where('code', $validated['pre_req_code'])->value('id');
                 $course->pre_req_main = $preReqId;
             }
 
@@ -341,7 +341,7 @@ class HodController extends Controller
             ]);
 
             // Fetch course
-            $course = Course::find($validated['course_id']);
+            $course = course::find($validated['course_id']);
 
             // If already marked as deleted
             if ($course->is_deleted == 1) {
@@ -957,7 +957,7 @@ class HodController extends Controller
             $sourceSessionName = $validated['source_session_id'];
             $destinationSessionName = $validated['destination_session_id'];
             $course = new Course();
-            $course = Course::find($courseName);
+            $course = course::find($courseName);
             if (!$course) {
                 return response()->json(['error' => 'Course not found.'], 404);
             }
