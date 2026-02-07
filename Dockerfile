@@ -28,9 +28,6 @@ RUN a2enmod rewrite
 # Copy existing application directory contents
 COPY . /var/www/html
 
-# Copy .env.example to .env if .env doesn't exist
-RUN if [ ! -f .env ]; then cp .env.example .env || true; fi
-
 # Install PHP dependencies (with increased memory limit for large packages)
 RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader --no-interaction
 

@@ -28,7 +28,36 @@ use App\Http\Controllers\DatacellModuleController;
 use App\Http\Controllers\HodController;
 use App\Http\Controllers\SingleInsertionController;
 use App\Http\Controllers\ParentsController;
+use Illuminate\Support\Facades\DB;
 
+// Health check route - public access
+Route::get('/health', function () {
+    try {
+        $connection = DB::connection()->getPdo();
+        $databaseName = DB::connection()->getDatabaseName();
+        
+        return response()->json([
+            'status' => 'success',
+            'database' => [
+                'name' => $databaseName,
+                'connected' => true,
+                'connection' => 'established'
+            ],
+            'timestamp' => now()->toDateTimeString()
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'database' => [
+                'name' => 'unknown',
+                'connected' => false,
+                'connection' => 'failed',
+                'error' => $e->getMessage()
+            ],
+            'timestamp' => now()->toDateTimeString()
+        ], 500);
+    }
+});
 
 //--------------------------------------------------( WEB SIDE )---------------------------------------------------//
 
