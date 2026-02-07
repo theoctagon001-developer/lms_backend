@@ -32,25 +32,25 @@ class timetable extends Model
     // Relationship to the Session mod
     public function session()
     {
-        return $this->belongsTo(Session::class);
+        return $this->belongsTo(session::class);
     }
 
     // Relationship to the Section model
     public function section()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsTo(section::class);
     }
 
     // Relationship to the Dayslot model
     public function dayslot()
     {
-        return $this->belongsTo(Dayslot::class);
+        return $this->belongsTo(dayslot::class);
     }
 
     // Relationship to the Venue model
     public function venue()
     {
-        return $this->belongsTo(Venue::class);
+        return $this->belongsTo(venue::class);
     }
 
     // Relationship to the Course model
@@ -62,13 +62,13 @@ class timetable extends Model
     // Relationship to the Teacher model (nullable)
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
 
     // Relationship to the JuniorLecturer model (nullable)
     public function juniorLecturer()
     {
-        return $this->belongsTo(JuniorLecturer::class, 'junior_lecturer_id');
+        return $this->belongsTo(juniorlecturer::class, 'junior_lecturer_id');
     }
     public static function getTodayTimetableBySectionId($section_id, $day = null)
     {
@@ -270,7 +270,7 @@ class timetable extends Model
         if (!$student_id) {
             return [];
         }
-        $currentSessionId = (new Session())->getCurrentSessionId();
+        $currentSessionId = (new session())->getCurrentSessionId();
         if (!$currentSessionId) {
             return [];
         }
@@ -333,7 +333,7 @@ class timetable extends Model
             return [];
         }
 
-        $currentSessionId = (new Session())->getCurrentSessionId();
+        $currentSessionId = (new session())->getCurrentSessionId();
         if (!$currentSessionId) {
             return [];
         }

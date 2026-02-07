@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Exception;
-use App\Models\User;
+use App\Models\user;
 use Illuminate\Http\Request;
 use App\Mail\ForgetPasswordEmail;
 use App\Mail\PasswordChangeEmail;
@@ -22,7 +22,7 @@ class AuthenticationController extends Controller
                 'email' => 'required|email'
             ]);
 
-            $user = User::where('email', $request->email)->first();
+            $user = user::where('email', $request->email)->first();
 
             if (!$user) {
                 return response()->json([
@@ -115,11 +115,11 @@ class AuthenticationController extends Controller
                     'min:1' // At least one letter & one number
                 ],
             ]);
-            $user = User::findOrFail($request->user_id);
+            $user = user::findOrFail($request->user_id);
             if ($user->password === $request->new_password) {
                 return response()->json(['message' => 'You are already using this password. Choose a new one.'], 400);
             }
-            $passwordExists = User::where('id', '!=', $user->id)
+            $passwordExists = user::where('id', '!=', $user->id)
                 ->where('password', $request->new_password)
                 ->exists();
 
@@ -142,11 +142,11 @@ class AuthenticationController extends Controller
     public static function sendTwoStepVer($user_id, $email, $name)
     {
         try {
-            $user = User::find($user_id);
+            $user = user::find($user_id);
             if (!$user || $user->email !== $email) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'User not found or email mismatch.'
+                    'message' => 'user not found or email mismatch.'
                 ], 404);
             }
             $otp = rand(100000, 999999);

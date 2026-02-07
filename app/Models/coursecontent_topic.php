@@ -11,10 +11,10 @@ class coursecontent_topic extends Model
     protected $fillable = ['coursecontent_id', 'topic_id'];
     public function courseContent()
     {
-        return $this->belongsTo(CourseContent::class, 'coursecontent_id', 'id');
+        return $this->belongsTo(coursecontent::class, 'coursecontent_id', 'id');
     }
     public function topic()
     {
-        return $this->belongsTo(Topic::class, 'topic_id', 'id');
+        return $this->belongsTo(topic::class, 'topic_id', 'id');
     }
 }

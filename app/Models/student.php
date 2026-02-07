@@ -31,10 +31,10 @@ class student extends Model
      * Define relationships with other models if necessary
      */
 
-    // Relationship to User model
+    // Relationship to user model
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(user::class, 'user_id');
     }
    public function parents()
 {
@@ -45,19 +45,19 @@ class student extends Model
     // Relationship to Section model
     public function section()
     {
-        return $this->belongsTo(Section::class, 'section_id');
+        return $this->belongsTo(section::class, 'section_id');
     }
 
     // Relationship to Program model
     public function program()
     {
-        return $this->belongsTo(Program::class, 'program_id');
+        return $this->belongsTo(program::class, 'program_id');
     }
 
     // Relationship to Session model
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(session::class, 'session_id');
     }
     public function studentOfferedCourses()
     {

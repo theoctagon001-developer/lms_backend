@@ -49,6 +49,6 @@ class temp_enroll extends Model
      */
     public function venue()
     {
-        return $this->belongsTo(Venue::class, 'venue');
+        return $this->belongsTo(venue::class, 'venue');
     }
 }

@@ -23,7 +23,7 @@ class grader_requests extends Model
      */
     public function grader()
     {
-        return $this->belongsTo(Grader::class, 'grader_id');
+        return $this->belongsTo(grader::class, 'grader_id');
     }
 
     /**
@@ -31,7 +31,7 @@ class grader_requests extends Model
      */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
 }
 

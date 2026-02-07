@@ -21,10 +21,10 @@ class student_task_result extends Model
     // Relationship to Task model
     public function task()
     {
-        return $this->belongsTo(Task::class, 'Task_id');
+        return $this->belongsTo(task::class, 'Task_id');
     }    public function student()
     {
-        return $this->belongsTo(Student::class, 'Student_id');
+        return $this->belongsTo(student::class, 'Student_id');
     }
     public static function storeOrUpdateResult($task_id, $student_RegNo, $obtainedMarks)
     {

@@ -20,11 +20,11 @@ class teacher extends Model
     ];
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(user::class, 'user_id');
     }
     public function timetables()
     {
-        return $this->hasMany(Timetable::class, 'teacher_id', 'id');
+        return $this->hasMany(timetable::class, 'teacher_id', 'id');
     }
     public function getIDByName($Name = null)
     {

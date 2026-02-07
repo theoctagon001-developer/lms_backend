@@ -79,7 +79,7 @@ class NotificationController extends Controller
             ], 422);
 
         } catch (Exception $e) {
-            Log::error('Notification Fetch Error for User ID ' . ($request->user_id ?? 'null') . ': ' . $e->getMessage());
+            Log::error('Notification Fetch Error for user ID ' . ($request->user_id ?? 'null') . ': ' . $e->getMessage());
 
             return response()->json([
                 'status' => false,

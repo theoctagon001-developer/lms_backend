@@ -20,7 +20,7 @@ class quiz_questions extends Model
 
     public function courseContent()
     {
-        return $this->belongsTo(CourseContent::class, 'coursecontent_id', 'id');
+        return $this->belongsTo(coursecontent::class, 'coursecontent_id', 'id');
     }
     public function Options()
     {

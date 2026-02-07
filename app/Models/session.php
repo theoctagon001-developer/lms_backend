@@ -14,7 +14,7 @@ class session extends Model
     protected $fillable = ['name', 'year', 'start_date', 'end_date'];
     public function timetables()
     {
-        return $this->hasMany(Timetable::class, 'session_id', 'id');
+        return $this->hasMany(timetable::class, 'session_id', 'id');
     }
     public function offeredCourses()
     {

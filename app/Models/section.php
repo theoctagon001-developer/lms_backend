@@ -29,7 +29,7 @@ class section extends Model
     }
     public function timetables()
     {
-        return $this->hasMany(Timetable::class, 'section_id', 'id');
+        return $this->hasMany(timetable::class, 'section_id', 'id');
     }
     public function getIDByName($name)
     {

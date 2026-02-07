@@ -21,11 +21,11 @@ class grader_task extends Model
     ];
     public function grader()
     {
-        return $this->belongsTo(Grader::class, 'Grader_id', 'id');
+        return $this->belongsTo(grader::class, 'Grader_id', 'id');
     }
     public function task()
     {
-        return $this->belongsTo(Task::class, 'Task_id', 'id');
+        return $this->belongsTo(task::class, 'Task_id', 'id');
     }
     public static function markTaskAsGraded($taskId)
     {

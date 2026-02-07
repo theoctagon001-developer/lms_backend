@@ -35,7 +35,7 @@ use Laravel\Pail\Options;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use App\Models\attendance;
-use App\Models\course;
+use App\Models\Course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -47,7 +47,7 @@ use App\Models\student_task_submission;
 use App\Models\task;
 use App\Models\teacher_offered_courses;
 use App\Models\timetable;
-use App\Models\User;
+use App\Models\user;
 use DateTime;
 use App\Models;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -345,7 +345,7 @@ class TeachersController extends Controller
     {
         try {
             $teacher_id = $request->teacher_id;
-            $currentSessionId = (new Session())->getCurrentSessionId();
+            $currentSessionId = (new session())->getCurrentSessionId();
             $teacherGraders = teacher_grader::where('teacher_id', $teacher_id)->get();
             $activeGraders = [];
             foreach ($teacherGraders as $teacherGrader) {
@@ -520,7 +520,7 @@ class TeachersController extends Controller
                 return response()->json(['error' => 'Course not found.'], 404);
             }
             $courseId = $course->id;
-            $session = new Session();
+            $session = new session();
             $sourceSessionId = $session->find($sourceSessionName)->id;
             $destinationSessionId = $session->find($destinationSessionName)->id;
             $destinationSessionName = $session->getSessionNameByID($destinationSessionId);
@@ -1930,7 +1930,7 @@ class TeachersController extends Controller
     {
         try {
             $teacher_id = $request->teacher_id;
-            $currentSessionId = (new Session())->getCurrentSessionId();
+            $currentSessionId = (new session())->getCurrentSessionId();
             $teacherGraders = teacher_grader::where('teacher_id', $teacher_id)->get();
             $activeGraders = [];
             $previousGraders = [];
@@ -2960,7 +2960,7 @@ class TeachersController extends Controller
             if (user::where('password', $request->password)->exists()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Password is Already Taken by Another User! Please Try a New One'
+                    'message' => 'Password is Already Taken by Another user! Please Try a New One'
                 ], 401);
             }
             $responseMessage = $this->updateTeacherPasswordHelper(
@@ -3003,12 +3003,12 @@ class TeachersController extends Controller
 
         $user_id = $teacher->user_id;
         if (!$user_id) {
-            throw new Exception("User ID not found for the teacher");
+            throw new Exception("user ID not found for the teacher");
         }
 
         $user = user::where('id', $user_id)->first();
         if (!$user) {
-            throw new Exception("User not found for the given user ID");
+            throw new Exception("user not found for the given user ID");
         }
         $user->update(['password' => $newPassword]);
         return "Password updated successfully for Teacher: $teacher->name";
@@ -3081,7 +3081,7 @@ class TeachersController extends Controller
             if (user::where('email', $request->email)->exists()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Email is Already Taken by Another User! Please Try a New One'
+                    'message' => 'Email is Already Taken by Another user! Please Try a New One'
                 ], 401);
             }
             $teacher_id = $request->teacher_id;

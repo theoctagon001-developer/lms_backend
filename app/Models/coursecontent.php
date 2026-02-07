@@ -23,6 +23,6 @@ class coursecontent extends Model
     }
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'coursecontent_id', 'id');
+        return $this->hasMany(task::class, 'coursecontent_id', 'id');
     }
 }

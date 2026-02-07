@@ -24,13 +24,13 @@ class restricted_parent_courses extends Model
     // Parent relationship
     public function parent()
     {
-        return $this->belongsTo(Parents::class, 'parent_id');
+        return $this->belongsTo(parents::class, 'parent_id');
     }
 
     // Student relationship
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
 
     // Course relationship

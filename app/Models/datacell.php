@@ -24,9 +24,9 @@ class datacell extends Model
      'image'
  ];
 
- // Define the relationship with the User model
+ // Define the relationship with the user model
  public function user()
  {
-     return $this->belongsTo(User::class, 'user_id', 'id');
+     return $this->belongsTo(user::class, 'user_id', 'id');
  }
 }

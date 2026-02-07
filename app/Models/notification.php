@@ -32,14 +32,14 @@ class notification extends Model
     // Define the relationship to the Section model
     public function section()
     {
-        return $this->belongsTo(Section::class, 'Student_Section', 'id');
+        return $this->belongsTo(section::class, 'Student_Section', 'id');
     }
     public function senderUser()
     {
-        return $this->belongsTo(User::class, 'TL_sender_id', 'id');
+        return $this->belongsTo(user::class, 'TL_sender_id', 'id');
     }    public function receiverUser()
     {
-        return $this->belongsTo(User::class, 'TL_receiver_id', 'id');
+        return $this->belongsTo(user::class, 'TL_receiver_id', 'id');
     }
     public static function broadcastMessage($title, $description, $sender_user_id, $receiver = null)
     {

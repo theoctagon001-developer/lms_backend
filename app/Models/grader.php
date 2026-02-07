@@ -23,6 +23,6 @@ class grader extends Model
      ];
       public function student()
      {
-        return $this->belongsTo(Student::class, 'student_id', 'id');
+        return $this->belongsTo(student::class, 'student_id', 'id');
      }
 }

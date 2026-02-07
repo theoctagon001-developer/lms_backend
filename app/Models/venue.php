@@ -16,10 +16,10 @@ class venue extends Model
    protected $fillable = ['venue'];
    public function timetables()
     {
-        return $this->hasMany(Timetable::class, 'venue_id', 'id');
+        return $this->hasMany(timetable::class, 'venue_id', 'id');
     }
     public function attendances()
    {
-       return $this->hasMany(Attendance::class, 'venue_id', 'id');
+       return $this->hasMany(attendance::class, 'venue_id', 'id');
    }
 }

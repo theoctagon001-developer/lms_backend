@@ -32,7 +32,7 @@ class date_sheet extends Model
     ];
     public function section()
     {
-        return $this->belongsTo(Section::class, 'section_id');
+        return $this->belongsTo(section::class, 'section_id');
     }
 
   
@@ -43,6 +43,6 @@ class date_sheet extends Model
 
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(session::class, 'session_id');
     }
 }

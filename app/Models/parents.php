@@ -24,11 +24,11 @@ class parents extends Model
     ];
 
     /**
-     * Parent belongs to a User
+     * Parent belongs to a user
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(user::class);
     }
 
     /**
@@ -36,7 +36,7 @@ class parents extends Model
      */
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'parent_student', 'parent_id', 'student_id');
+        return $this->belongsToMany(student::class, 'parent_student', 'parent_id', 'student_id');
     }
     public function restrictedCourses()
 {

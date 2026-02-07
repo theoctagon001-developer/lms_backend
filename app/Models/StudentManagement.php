@@ -109,11 +109,11 @@ class StudentManagement extends Model
         }
         $user_id = $student->user_id;
         if (!$user_id) {
-            throw new Exception("User ID not found for the student");
+            throw new Exception("user ID not found for the student");
         }
         $user = user::where('id', $user_id)->first();
         if (!$user) {
-            throw new Exception("User not found for the given user ID");
+            throw new Exception("user not found for the given user ID");
         }
         $user->update(['password' => $newPassword]);
 
@@ -181,7 +181,7 @@ class StudentManagement extends Model
                 $courses[] = [
                     'course_name' => $courseName,
                     'course_id' => $offeredCourse->course_id,
-                    'Session' => (new session())->getSessionNameByID($currentSessionId),
+                    'session' => (new session())->getSessionNameByID($currentSessionId),
                     'Section' => (new section())->getNameByID($enrolledCourse->section_id),
                     'offered_course_id' => $offeredCourse->id,
                     'section_id' => $enrolledCourse->section_id,
@@ -211,7 +211,7 @@ class StudentManagement extends Model
                 $courses[] = [
                     'course_name' => $offeredCourse->course->name,
                     'course_id' => $offeredCourse->course->id,
-                    'Session' => (new session())->getSessionNameByID($session->id),
+                    'session' => (new session())->getSessionNameByID($session->id),
                     'Section' => (new section())->getNameByID($section),
                     'offered_course_id' => $offeredCourse->id,
                     'section_id' => $section,

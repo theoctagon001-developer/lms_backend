@@ -34,7 +34,7 @@ use App\Models\teacher;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\attendance;
-use App\Models\course;
+use App\Models\Course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -46,7 +46,7 @@ use App\Models\student_task_submission;
 use App\Models\task;
 use App\Models\teacher_offered_courses;
 use App\Models\timetable;
-use App\Models\User;
+use App\Models\user;
 use Exception;
 use App\Models;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -257,13 +257,13 @@ class StudentsController extends Controller
     }
     public function getCelendarData(Request $request)
     {
-        $sessions = Session::orderBy('start_date', 'desc')->get();
+        $sessions = session::orderBy('start_date', 'desc')->get();
 
         $formattedSessions = $sessions->map(function ($session) {
             return [
                 'start_date' => $session->start_date,
                 'end_date' => $session->end_date,
-                'name' => (new Session())->getSessionNameByID($session->id)
+                'name' => (new session())->getSessionNameByID($session->id)
             ];
         });
         $excluded_days = $sessions = excluded_days::orderBy('date', 'desc')->get();
@@ -797,7 +797,7 @@ class StudentsController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'Failed',
-                'data' => 'You are a Unauthorized User !'
+                'data' => 'You are a Unauthorized user !'
             ], 404);
 
         } catch (Exception $e) {
@@ -815,7 +815,7 @@ class StudentsController extends Controller
                 "username" => 'required|string',
                 "password" => 'required'
             ]);
-            $user = User::with('role')
+            $user = user::with('role')
                 ->where('username', $request->username)
                 ->where('password', $request->password)
                 ->firstOrFail();
@@ -880,7 +880,7 @@ class StudentsController extends Controller
                 }
                 
                 if (!$Admin->user) {
-                    throw new Exception('User record not found for Admin id: ' . $Admin->id);
+                    throw new Exception('user record not found for Admin id: ' . $Admin->id);
                 }
                 
                 $currentSessionId = (new session())->getCurrentSessionId();
@@ -970,7 +970,7 @@ class StudentsController extends Controller
                 }
                 
                 if (!$Datacell->user) {
-                    throw new Exception('User record not found for Datacell id: ' . $Datacell->id);
+                    throw new Exception('user record not found for Datacell id: ' . $Datacell->id);
                 }
                 
                 $currentSessionId = (new session())->getCurrentSessionId();
@@ -1018,7 +1018,7 @@ class StudentsController extends Controller
                 }
                 
                 if (!$jl->user) {
-                    throw new Exception('User record not found for JuniorLecturer id: ' . $jl->id);
+                    throw new Exception('user record not found for JuniorLecturer id: ' . $jl->id);
                 }
                 
                 $attribute = excluded_days::checkHoliday() ? 'Timetable' : 'Timetable';
@@ -1075,7 +1075,7 @@ class StudentsController extends Controller
                 }
                 
                 if (!$HOD->user) {
-                    throw new Exception('User record not found for HOD id: ' . $HOD->id);
+                    throw new Exception('user record not found for HOD id: ' . $HOD->id);
                 }
                 
                 $currentSessionId = (new session())->getCurrentSessionId();
@@ -1125,7 +1125,7 @@ class StudentsController extends Controller
                 }
                 
                 if (!$HOD->user) {
-                    throw new Exception('User record not found for Director id: ' . $HOD->id);
+                    throw new Exception('user record not found for Director id: ' . $HOD->id);
                 }
                 
                 $currentSessionId = (new session())->getCurrentSessionId();
@@ -1210,7 +1210,7 @@ class StudentsController extends Controller
             } else {
                 return response()->json([
                     'status' => 'Failed',
-                    'data' => 'You are a Unauthorized User !'
+                    'data' => 'You are a Unauthorized user !'
                 ], 200);
             }
 
@@ -1224,7 +1224,7 @@ class StudentsController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'Failed',
-                'data' => 'You are a Unauthorized User !'
+                'data' => 'You are a Unauthorized user !'
             ], 404);
 
         } catch (Exception $e) {
@@ -1242,7 +1242,7 @@ class StudentsController extends Controller
                 "username" => 'required|string',
                 "password" => 'required'
             ]);
-            $user = User::with('role')
+            $user = user::with('role')
                 ->where('username', $request->username)
                 ->where('password', $request->password)
                 ->firstOrFail();
@@ -1416,7 +1416,7 @@ class StudentsController extends Controller
             } else {
                 return response()->json([
                     'status' => 'Failed',
-                    'data' => 'You are a Unauthorized User !'
+                    'data' => 'You are a Unauthorized user !'
                 ], 200);
             }
         } catch (ValidationException $e) {
@@ -1428,7 +1428,7 @@ class StudentsController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'Failed',
-                'data' => 'You are a Unauthorized User !'
+                'data' => 'You are a Unauthorized user !'
             ], 404);
 
         } catch (Exception $e) {
@@ -2315,7 +2315,7 @@ class StudentsController extends Controller
             if (user::where('password', $request->newPassword)->exists()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Password is Already Taken by Differenet User ! Please Try New'
+                    'message' => 'Password is Already Taken by Differenet user ! Please Try New'
                 ], 401);
             }
             $responseMessage = StudentManagement::updateStudentPassword(

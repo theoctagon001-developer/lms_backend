@@ -42,7 +42,7 @@ class exam_seating_plan extends Model
      */
     public function venue()
     {
-        return $this->belongsTo(Venue::class, 'venue_id');
+        return $this->belongsTo(venue::class, 'venue_id');
     }
 
     /**
@@ -51,7 +51,7 @@ class exam_seating_plan extends Model
      */
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
 
     /**
@@ -60,7 +60,7 @@ class exam_seating_plan extends Model
      */
     public function section()
     {
-        return $this->belongsTo(Section::class, 'section_id');
+        return $this->belongsTo(section::class, 'section_id');
     }
 
     /**
@@ -78,6 +78,6 @@ class exam_seating_plan extends Model
      */
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(session::class, 'session_id');
     }
 }

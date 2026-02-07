@@ -13,17 +13,17 @@ class student_exam_result extends Model
     protected $fillable = ['obtained_marks', 'question_id', 'student_id', 'exam_id'];
     public function exam()
     {
-        return $this->belongsTo(Exam::class, 'exam_id');
+        return $this->belongsTo(exam::class, 'exam_id');
     }
     public function question()
     {
-        return $this->belongsTo(Question::class, 'question_id');
+        return $this->belongsTo(question::class, 'question_id');
     }
 
     // Relationship to Student model
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
 
 }

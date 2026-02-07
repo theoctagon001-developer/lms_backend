@@ -25,7 +25,7 @@ class offered_courses extends Model
     }
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id', 'id');
+        return $this->belongsTo(session::class, 'session_id', 'id');
     }
     public function exams()
     {

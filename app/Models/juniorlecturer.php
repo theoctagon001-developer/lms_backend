@@ -24,14 +24,14 @@ class juniorlecturer extends Model
         'cnic'
     ];
 
-    // Define the relationship to the User model
+    // Define the relationship to the user model
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(user::class, 'user_id', 'id');
     }
     public function timetables()
     {
-        return $this->hasMany(Timetable::class, 'junior_lecturer_id', 'id');
+        return $this->hasMany(timetable::class, 'junior_lecturer_id', 'id');
     }
     
 }

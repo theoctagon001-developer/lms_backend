@@ -30,12 +30,12 @@ class t_coursecontent_topic_status extends Model
     // Relationship to CourseContent model
     public function courseContent()
     {
-        return $this->belongsTo(CourseContent::class, 'coursecontent_id');
+        return $this->belongsTo(coursecontent::class, 'coursecontent_id');
     }
 
     // Relationship to Topic model
     public function topic()
     {
-        return $this->belongsTo(Topic::class, 'topic_id');
+        return $this->belongsTo(topic::class, 'topic_id');
     }
 }

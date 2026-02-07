@@ -27,13 +27,13 @@ class teacher_offered_courses extends Model
     // Relationship to Teacher model
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+        return $this->belongsTo(teacher::class, 'teacher_id');
     }
 
     // Relationship to Section model
     public function section()
     {
-        return $this->belongsTo(Section::class, 'section_id');
+        return $this->belongsTo(section::class, 'section_id');
     }
 
     // Relationship to OfferedCourse model
@@ -43,7 +43,7 @@ class teacher_offered_courses extends Model
     }
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'teacher_offered_course_id', 'id');
+        return $this->hasMany(task::class, 'teacher_offered_course_id', 'id');
     }
     public function teacherJuniorLecturer()
     {

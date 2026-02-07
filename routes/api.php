@@ -276,10 +276,10 @@ Route::prefix('Dropdown')->group(function () {
         return response()->json($formattedSections);
     });
     Route::get('/AllSessions', function () {
-        $sessions = Session::orderBy('start_date', 'desc')->get();
+        $sessions = session::orderBy('start_date', 'desc')->get();
 
         $formattedSessions = $sessions->map(function ($session) {
-            return (new Session())->getSessionNameByID($session->id);
+            return (new session())->getSessionNameByID($session->id);
         });
         return response()->json($formattedSessions);
     });
@@ -292,7 +292,7 @@ Route::prefix('Dropdown')->group(function () {
                     'id' => $course->id,
                     'course' => $course->course->name,
                     'session' => (new session())->getSessionNameByID($course->session->id),
-                    'data' => $course->course->name . ' (' . (new Session())->getSessionNameByID($course->session->id) . ')'
+                    'data' => $course->course->name . ' (' . (new session())->getSessionNameByID($course->session->id) . ')'
                 ];
             })
             ->values();
@@ -309,7 +309,7 @@ Route::prefix('Dropdown')->group(function () {
                     'id' => $course->id,
                     'course' => $course->course->name,
                     'session' => (new session())->getSessionNameByID($course->session->id),
-                    'data' => $course->course->name . ' (' . (new Session())->getSessionNameByID($course->session->id) . ')'
+                    'data' => $course->course->name . ' (' . (new session())->getSessionNameByID($course->session->id) . ')'
                 ];
             })
             ->values();
@@ -418,7 +418,7 @@ Route::prefix('Dropdown')->group(function () {
                     'id' => $course->id,
                     'course' => $course->course->name,
                     'session' => (new session())->getSessionNameByID($course->session->id),
-                    'data' => $course->course->name . ' (' . (new Session())->getSessionNameByID($course->session->id) . ')'
+                    'data' => $course->course->name . ' (' . (new session())->getSessionNameByID($course->session->id) . ')'
                 ];
             })
             ->values();

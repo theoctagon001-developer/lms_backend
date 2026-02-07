@@ -182,14 +182,14 @@ class Action extends Model
     {
         $attendanceData = [];
         try {
-            $currentSessionId = (new Session())->getCurrentSessionId();
+            $currentSessionId = (new session())->getCurrentSessionId();
             if ($currentSessionId == 0) {
                 return $attendanceData;
             }
             $enrollments = student_offered_courses::where('student_id', $studentId)
                 ->with('offeredCourse')
                 ->whereHas('offeredCourse', function ($query) use ($currentSessionId) {
-                    $query->where('session_id', (new Session())->getCurrentSessionId());
+                    $query->where('session_id', (new session())->getCurrentSessionId());
                 })
                 ->get();
             foreach ($enrollments as $enrollment) {

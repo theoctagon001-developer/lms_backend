@@ -25,7 +25,7 @@ class teacher_content extends Model
      */
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
+        return $this->belongsTo(teacher::class, 'teacher_id', 'id');
     }
     public function allocations()
     {

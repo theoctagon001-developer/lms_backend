@@ -20,7 +20,7 @@ class attendance extends Model
     ];
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id', 'id');
+        return $this->belongsTo(student::class, 'student_id', 'id');
     }
     public function teacherOfferedCourse()
     {
@@ -28,7 +28,7 @@ class attendance extends Model
     }
     public function venue()
     {
-        return $this->belongsTo(Venue::class, 'venue_id');
+        return $this->belongsTo(venue::class, 'venue_id');
     }
     public static function getAttendanceBySubject($teacher_offered_course_id = null, $student_id = null)
     {
@@ -131,11 +131,11 @@ class attendance extends Model
         }
         $attendanceData = [];
         try {
-            $currentSessionId = (new Session())->getCurrentSessionId();
+            $currentSessionId = (new session())->getCurrentSessionId();
             $enrollments = student_offered_courses::where('student_id', $studentId)
                 ->with('offeredCourse')
                 ->whereHas('offeredCourse', function ($query) use ($currentSessionId) {
-                    $query->where('session_id', (new Session())->getCurrentSessionId());
+                    $query->where('session_id', (new session())->getCurrentSessionId());
                 })
                 ->get();
             foreach ($enrollments as $enrollment) {
@@ -212,7 +212,7 @@ class attendance extends Model
         }
         $attendanceData = [];
         try {
-            $currentSessionId = (new Session())->getCurrentSessionId();
+            $currentSessionId = (new session())->getCurrentSessionId();
             // $enrollments = student_offered_courses::where('student_id', $studentId)
             //     ->with('offeredCourse')
             //     ->whereHas('offeredCourse', function ($query) use ($currentSessionId) {

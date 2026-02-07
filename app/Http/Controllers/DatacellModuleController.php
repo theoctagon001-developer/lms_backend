@@ -30,7 +30,7 @@ use Laravel\Pail\Options;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Http\Request;
 use App\Models\attendance;
-use App\Models\course;
+use App\Models\Course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -42,7 +42,7 @@ use App\Models\student_task_submission;
 use App\Models\task;
 use App\Models\teacher_offered_courses;
 use App\Models\timetable;
-use App\Models\User;
+use App\Models\user;
 use DateTime;
 use App\Models;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -1088,7 +1088,7 @@ class DatacellModuleController extends Controller
                             'date_of_birth' => $formattedDOB,
                             'gender' => $gender
                         ]);
-                        $user = User::find($teacher->user_id);
+                        $user = user::find($teacher->user_id);
                         $successMessages[] = [
                             "status" => 'success',
                             "Logs" => "The teacher with Name: {$name} was updated.",
@@ -1102,7 +1102,7 @@ class DatacellModuleController extends Controller
                             $role = Role::create(["type" => 'Teacher']);
                         }
 
-                        $user = new User();
+                        $user = new user();
                         $user->username = $username;
                         $user->password = $password;
                         $user->role_id = $role->id;
@@ -1239,7 +1239,7 @@ class DatacellModuleController extends Controller
                             'date_of_birth' => $formattedDOB,
                             'gender' => $gender
                         ]);
-                        $user = User::find($teacher->user_id);
+                        $user = user::find($teacher->user_id);
                         $successMessages[] = [
                             "status" => 'success',
                             "Logs" => "The Junior Lecturer with Name: {$name} was updated.",
@@ -1253,7 +1253,7 @@ class DatacellModuleController extends Controller
                             $role = Role::create(["type" => 'JuniorLecturer']);
                         }
 
-                        $user = new User();
+                        $user = new user();
                         $user->username = $username;
                         $user->password = $password;
                         $user->role_id = $role->id;
@@ -1387,7 +1387,7 @@ class DatacellModuleController extends Controller
     //                     'date_of_birth' => $formattedDOB,
     //                     'gender' => $gender
     //                 ]);
-    //                 $user = User::find($userId);
+    //                 $user = user::find($userId);
     //                 $successMessages[] = ["status" => 'success', "Logs" => "The teacher with Name: {$name} was updated.", "username" => $username, "password" => $user->password];
     //             } else {
     //                 $password = Action::generateUniquePassword($name);
@@ -1675,7 +1675,7 @@ class DatacellModuleController extends Controller
 
             $file = $request->file('excel_file');
             $sessionName = $request->input('session');
-            $sessionId = (new Session())->getSessionIdByName($sessionName);
+            $sessionId = (new session())->getSessionIdByName($sessionName);
 
             if ($sessionId === 0) {
                 return response()->json([
@@ -1826,7 +1826,7 @@ class DatacellModuleController extends Controller
 
             $sessionName = $request->input('session');
 
-            $sessionId = (new Session())->getSessionIdByName($sessionName);
+            $sessionId = (new session())->getSessionIdByName($sessionName);
             if (!$sessionId) {
                 return response()->json([
                     'status' => 'error',
@@ -2716,7 +2716,7 @@ class DatacellModuleController extends Controller
     // }
     public function getTimetableGroupedBySection(Request $request)
     {
-        $session_id = $request->session_id ?? (new Session())->getCurrentSessionId();
+        $session_id = $request->session_id ?? (new session())->getCurrentSessionId();
         if (!$session_id) {
             return response()->json(['error' => 'Session ID is required.'], 400);
         }

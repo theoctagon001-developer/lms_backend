@@ -27,6 +27,6 @@ class parent_student extends Model
     // Relation to Student
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
 }

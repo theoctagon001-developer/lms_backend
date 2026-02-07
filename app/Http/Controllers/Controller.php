@@ -5,7 +5,7 @@ use App\Models\Action;
 use App\Models\notification;
 use App\Models\student;
 use App\Models\teacher_offered_courses;
-use App\Models\User;
+use App\Models\user;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models;

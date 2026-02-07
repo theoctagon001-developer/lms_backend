@@ -35,6 +35,6 @@ class contested_attendance extends Model
      */
     public function attendance()
     {
-        return $this->belongsTo(Attendance::class, 'Attendance_id');
+        return $this->belongsTo(attendance::class, 'Attendance_id');
     }
 }

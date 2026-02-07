@@ -33,7 +33,7 @@ class task extends Model
      */
     public function courseContent()
     {
-        return $this->belongsTo(CourseContent::class, 'coursecontent_id', 'id');
+        return $this->belongsTo(coursecontent::class, 'coursecontent_id', 'id');
     }
 
     /**

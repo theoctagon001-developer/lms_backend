@@ -551,7 +551,7 @@ class SingleInsertionController extends Controller
     public function getUnOfferedCoursesAcrossAllSessions()
     {
         try {
-            $sessions = Session::orderByDesc('start_date')->get();
+            $sessions = session::orderByDesc('start_date')->get();
             $result = [];
 
             foreach ($sessions as $session) {
@@ -1585,7 +1585,7 @@ class SingleInsertionController extends Controller
                 ], 409);
             }
 
-            $existingUser = User::where('username', $username)->first();
+            $existingUser = user::where('username', $username)->first();
             if ($existingUser) {
                 return response()->json([
                     'status' => 'failed',
@@ -1673,7 +1673,7 @@ class SingleInsertionController extends Controller
                 ], 409);
             }
             // Check if the user already exists
-            $existingUser = User::where('username', $username)->first();
+            $existingUser = user::where('username', $username)->first();
             if ($existingUser) {
                 return response()->json([
                     'status' => 'failed',
@@ -1757,7 +1757,7 @@ class SingleInsertionController extends Controller
             $directory = $role === 'Admin' ? 'Images/Admin' : 'Images/DataCell';
 
             // Check if user already exists
-            $existingUser = User::where('username', $username)->first();
+            $existingUser = user::where('username', $username)->first();
             if ($existingUser) {
                 return response()->json([
                     'status' => 'failed',
@@ -1833,7 +1833,7 @@ class SingleInsertionController extends Controller
             $username = strtolower(str_replace(' ', '', $name)) . $postfix;
             $model = Director::class;
             $directory = 'Images/Director';
-            $existingUser = User::where('username', $username)->first();
+            $existingUser = user::where('username', $username)->first();
             if ($existingUser) {
                 return response()->json([
                     'status' => 'failed',
@@ -1909,7 +1909,7 @@ class SingleInsertionController extends Controller
             $username = strtolower(str_replace(' ', '', $name)) . $postfix;
             $model = Hod::class;
             $directory = 'Images/HOD';
-            $existingUser = User::where('username', $username)->first();
+            $existingUser = user::where('username', $username)->first();
             if ($existingUser) {
                 return response()->json([
                     'status' => 'failed',
@@ -2278,14 +2278,14 @@ class SingleInsertionController extends Controller
                 $postfix = '.datacell@biit.edu';
             }
             $username = strtolower(str_replace(' ', '', $name)) . $postfix;
-            $userAccount = User::find($user->user_id);
+            $userAccount = user::find($user->user_id);
             if ($userAccount) {
                 $userAccount->update([
                     'username' => $username // Hash password before saving
                 ]);
             }
             if (!empty($password)) {
-                $userAccount = User::find($user->user_id);
+                $userAccount = user::find($user->user_id);
                 if ($userAccount) {
                     $userAccount->update([
                         'password' => $password // Hash password before saving
@@ -2293,7 +2293,7 @@ class SingleInsertionController extends Controller
                 }
             }
             if (!empty($email)) {
-                $userAccount = User::find($user->user_id);
+                $userAccount = user::find($user->user_id);
                 if ($userAccount) {
                     $userAccount->update([
                         'email' => $email // Hash password before saving
@@ -2372,7 +2372,7 @@ class SingleInsertionController extends Controller
             if ($request->hasFile('image')) {
                 $imagePath = Action::storeFile($request->file('image'), 'Images/Student', $regNo);
             }
-            $user = User::create([
+            $user = user::create([
                 'username' => $regNo,
                 'password' => $password,
                 'email' => $email,
@@ -2429,7 +2429,7 @@ class SingleInsertionController extends Controller
         // }
         $name = $request->name;
         $year = $request->year;
-        $existingSession = Session::where('name', $name)
+        $existingSession = session::where('name', $name)
             ->where('year', $year)
             ->exists();
 
@@ -2437,7 +2437,7 @@ class SingleInsertionController extends Controller
             return response()->json(['message' => 'A session with the same name and year already exists.'], 400);
         }
         // Check for date range overlap
-        $overlap = Session::where(function ($query) use ($request) {
+        $overlap = session::where(function ($query) use ($request) {
             $query->whereBetween('start_date', [$request->start_date, $request->end_date])
                 ->orWhereBetween('end_date', [$request->start_date, $request->end_date])
                 ->orWhere(function ($query) use ($request) {
@@ -2451,7 +2451,7 @@ class SingleInsertionController extends Controller
         }
 
         // Create session
-        $session = Session::create([
+        $session = session::create([
             'name' => $name,
             'year' => $year,
             'start_date' => $request->start_date,
@@ -2469,7 +2469,7 @@ class SingleInsertionController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
-        $session = Session::find($id);
+        $session = session::find($id);
         if (!$session) {
             return response()->json(['message' => 'Session not found.'], 404);
         }
@@ -2482,7 +2482,7 @@ class SingleInsertionController extends Controller
         [$name, $year] = $nameParts;
 
         // Check for date range overlap (excluding current session)
-        $overlap = Session::where('id', '!=', $id)
+        $overlap = session::where('id', '!=', $id)
             ->where(function ($query) use ($request) {
                 $query->whereBetween('start_date', [$request->start_date, $request->end_date])
                     ->orWhereBetween('end_date', [$request->start_date, $request->end_date])

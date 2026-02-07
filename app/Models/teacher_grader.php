@@ -24,14 +24,14 @@ class teacher_grader extends Model
    // Relationship to Grader model
    public function grader()
    {
-       return $this->belongsTo(Grader::class, 'grader_id');
+       return $this->belongsTo(grader::class, 'grader_id');
    }
    public function teacher()
    {
-       return $this->belongsTo(Teacher::class, 'teacher_id');
+       return $this->belongsTo(teacher::class, 'teacher_id');
    }
    public function session()
    {
-       return $this->belongsTo(Session::class, 'session_id');
+       return $this->belongsTo(session::class, 'session_id');
    }
 }

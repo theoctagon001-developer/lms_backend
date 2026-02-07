@@ -23,13 +23,13 @@ class student_task_submission extends Model
     ];
     public function task()
     {
-        return $this->belongsTo(Task::class, 'Task_id');
+        return $this->belongsTo(task::class, 'Task_id');
     }
 
     // Relationship to Student model
     public function student()
     {
-        return $this->belongsTo(Student::class, 'Student_id');
+        return $this->belongsTo(student::class, 'Student_id');
     }
    
 }

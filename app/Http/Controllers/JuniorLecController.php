@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use App\Models\exam;
 use App\Models\role;
 use App\Models\task;
-use App\Models\User;
+use App\Models\user;
 use App\Models\admin;
 use App\Models\topic;
 use App\Models\venue;
@@ -978,7 +978,7 @@ class JuniorLecController extends Controller
             if (user::where('email', $request->email)->exists()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Email is Already Taken by Another User! Please Try a New One'
+                    'message' => 'Email is Already Taken by Another user! Please Try a New One'
                 ], 401);
             }
             $teacher_id = $request->teacher_id;
@@ -1013,7 +1013,7 @@ class JuniorLecController extends Controller
             if (user::where('password', $request->password)->exists()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Password is Already Taken by Another User! Please Try a New One'
+                    'message' => 'Password is Already Taken by Another user! Please Try a New One'
                 ], 401);
             }
             $responseMessage = $this->updateTeacherPasswordHelper(
@@ -1056,12 +1056,12 @@ class JuniorLecController extends Controller
 
         $user_id = $teacher->user_id;
         if (!$user_id) {
-            throw new Exception("User ID not found for the teacher");
+            throw new Exception("user ID not found for the teacher");
         }
 
         $user = user::where('id', $user_id)->first();
         if (!$user) {
-            throw new Exception("User not found for the given user ID");
+            throw new Exception("user not found for the given user ID");
         }
         $user->update(['password' => $newPassword]);
         return "Password updated successfully for Teacher: $teacher->name";
@@ -2261,7 +2261,7 @@ class JuniorLecController extends Controller
             if (user::where('password', $request->newPassword)->exists()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Password is Already Taken by Another User! Please Try a New One'
+                    'message' => 'Password is Already Taken by Another user! Please Try a New One'
                 ], 401);
             }
 
@@ -2306,12 +2306,12 @@ class JuniorLecController extends Controller
 
         $user_id = $juniorLecturer->user_id;
         if (!$user_id) {
-            throw new Exception("User ID not found for the junior lecturer");
+            throw new Exception("user ID not found for the junior lecturer");
         }
 
         $user = user::where('id', $user_id)->first();
         if (!$user) {
-            throw new Exception("User not found for the given user ID");
+            throw new Exception("user not found for the given user ID");
         }
         $user->update(['password' => $newPassword]);
 

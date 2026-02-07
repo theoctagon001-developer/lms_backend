@@ -24,6 +24,6 @@ class admin extends Model
     public function user()
     {
         // Foreign key 'user_id' in this table, referencing 'id' in the 'user' table
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(user::class, 'user_id', 'id');
     }
 }

@@ -27,12 +27,12 @@ class Course extends Model
      */
     public function program()
     {
-        return $this->belongsTo(Program::class, 'program_id', 'id');
+        return $this->belongsTo(program::class, 'program_id', 'id');
     }
     // In Section.php
     public function timetables()
     {
-        return $this->hasMany(Timetable::class, 'course_id', 'id');
+        return $this->hasMany(timetable::class, 'course_id', 'id');
     }
 
     /**

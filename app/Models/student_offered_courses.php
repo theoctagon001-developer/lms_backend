@@ -23,11 +23,11 @@ class student_offered_courses extends Model
     // Relationship to Student model
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
     public function section()
     {
-        return $this->belongsTo(Section::class, 'section_id');
+        return $this->belongsTo(section::class, 'section_id');
     }
 
     // Relationship to OfferedCourse model

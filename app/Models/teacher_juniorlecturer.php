@@ -24,7 +24,7 @@ class teacher_juniorlecturer extends Model
    // Relationship to JuniorLecturer model
    public function juniorLecturer()
    {
-       return $this->belongsTo(JuniorLecturer::class, 'juniorlecturer_id');
+       return $this->belongsTo(juniorlecturer::class, 'juniorlecturer_id');
    }
 
    // Relationship to TeacherOfferedCourse model

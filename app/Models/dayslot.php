@@ -24,7 +24,7 @@ class dayslot extends Model
     // In Section.php
     public function timetables()
     {
-        return $this->hasMany(Timetable::class, 'dayslot_id', 'id');
+        return $this->hasMany(timetable::class, 'dayslot_id', 'id');
     }
 
 

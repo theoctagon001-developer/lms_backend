@@ -31,7 +31,7 @@ use GrahamCampbell\ResultType\Success;
 use Laravel\Pail\Options;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\attendance;
-use App\Models\course;
+use App\Models\Course;
 use App\Models\notification;
 use App\Models\offered_courses;
 use App\Models\section;
@@ -43,7 +43,7 @@ use App\Models\student_task_submission;
 use App\Models\task;
 use App\Models\teacher_offered_courses;
 use App\Models\timetable;
-use App\Models\User;
+use App\Models\user;
 use DateTime;
 use App\Models;
 use App\Models\admin;
@@ -103,8 +103,8 @@ class DatacellsController extends Controller
 
             $director->save();
 
-            // Update User model
-            $user = User::find($director->user_id);
+            // Update user model
+            $user = user::find($director->user_id);
             if ($user) {
                 if ($request->filled('email')) {
                     $user->email = $request->input('email');
@@ -172,7 +172,7 @@ class DatacellsController extends Controller
             $record->delete();
 
             // Delete the user record
-            User::where('id', $userId)->delete();
+            user::where('id', $userId)->delete();
 
             DB::commit();
 
@@ -2045,14 +2045,14 @@ class DatacellsController extends Controller
                 $gender = $singleRow['C'];
                 $email = $singleRow['D'];
                 $username = strtolower(str_replace(' ', '', $name)) . '_jl@biit.edu'; // Custom username format for JuniorLecturer
-                $userExists = User::where('username', $username)->exists();
+                $userExists = user::where('username', $username)->exists();
                 if ($userExists) {
                     $status[] = ["status" => 'failed', "reason" => "Username {$username} already exists!"];
                     continue;
                 }
                 $formattedDOB = (new DateTime($dateOfBirth))->format('Y-m-d');
                 $password = Action::generateUniquePassword($name);
-                $userId = Action::addOrUpdateUser($username, $password, $email, 'JuniorLecturer'); // Set User type as JuniorLecturer
+                $userId = Action::addOrUpdateUser($username, $password, $email, 'JuniorLecturer'); // Set user type as JuniorLecturer
 
                 if (!$userId) {
                     $status[] = ["status" => 'failed', "reason" => "Failed to create or update user for {$name}."];
@@ -2131,7 +2131,7 @@ class DatacellsController extends Controller
 
             $file = $request->file('excel_file');
             $sessionName = $request->input('session_name');
-            $sessionId = (new Session())->getSessionIdByName($sessionName);
+            $sessionId = (new session())->getSessionIdByName($sessionName);
 
             if ($sessionId === 0) {
                 return response()->json([
@@ -2282,7 +2282,7 @@ class DatacellsController extends Controller
 
             $sessionName = $request->input('session_name');
 
-            $sessionId = (new Session())->getSessionIdByName($sessionName);
+            $sessionId = (new session())->getSessionIdByName($sessionName);
             if (!$sessionId) {
                 return response()->json([
                     'status' => 'error',
@@ -3061,7 +3061,7 @@ class DatacellsController extends Controller
     }
     public function getTimetableGroupedBySection(Request $request)
     {
-        $session_id = $request->session_id ?? (new Session())->getCurrentSessionId();
+        $session_id = $request->session_id ?? (new session())->getCurrentSessionId();
         if (!$session_id) {
             return response()->json(['error' => 'Session ID is required.'], 400);
         }

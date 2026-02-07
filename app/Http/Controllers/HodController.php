@@ -962,7 +962,7 @@ class HodController extends Controller
                 return response()->json(['error' => 'Course not found.'], 404);
             }
             $courseId = $course->id;
-            $session = new Session();
+            $session = new session();
             $sourceSessionId = $session->find($sourceSessionName)->id;
             $destinationSessionId = $session->find($destinationSessionName)->id;
             $destinationSessionName = $session->getSessionNameByID($destinationSessionId);

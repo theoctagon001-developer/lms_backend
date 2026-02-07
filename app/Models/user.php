@@ -11,7 +11,7 @@ class user extends Model
     protected $fillable = ['username', 'password', 'email', 'role_id'];
     public function role()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(role::class, 'role_id');
     }
     public function fcmTokens()
     {

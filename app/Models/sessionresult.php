@@ -12,10 +12,10 @@ class sessionresult extends Model
     protected $fillable = ['GPA', 'Total_Credit_Hours', 'ObtainedCreditPoints', 'session_id', 'student_id'];
     public function session()
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(session::class, 'session_id');
     }
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(student::class, 'student_id');
     }
 }
