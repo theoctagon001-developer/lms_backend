@@ -874,7 +874,18 @@ class StudentsController extends Controller
                 $Admin = admin::where('user_id', $user->id)
                     ->with(['user'])
                     ->first();
-                $session = session::where('id', (new session())->getCurrentSessionId())->first();
+                
+                if (!$Admin) {
+                    throw new Exception('Admin record not found for user_id: ' . $user->id);
+                }
+                
+                if (!$Admin->user) {
+                    throw new Exception('User record not found for Admin id: ' . $Admin->id);
+                }
+                
+                $currentSessionId = (new session())->getCurrentSessionId();
+                $session = $currentSessionId ? session::where('id', $currentSessionId)->first() : null;
+                
                 $twoStepOtp = null;
                 if ($Admin->user->email) {
                     $twoStepResponse = AuthenticationController::sendTwoStepVer($Admin->user->id, $Admin->user->email, $Admin->name);
@@ -889,12 +900,12 @@ class StudentsController extends Controller
                     "Username" => $Admin->user->username,
                     "Password" => $Admin->user->password,
                     "user_id" => $Admin->user->id,
-                    "Current Session" => (new session())->getSessionNameByID($session->id) ?? 'N/A',
-                    "Start Date" => $session->start_date ?? "N/A",
-                    "End Date" => $session->end_date ?? "N/A",
+                    "Current Session" => $session ? (new session())->getSessionNameByID($session->id) ?? 'N/A' : 'N/A',
+                    "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
+                    "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $Admin->image ? asset($Admin->image) : null,
                     "course_count" => course::count(),
-                    "offered_course_count" => offered_courses::where('session_id', (new session())->getCurrentSessionId())->count(),
+                    "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                 ];
@@ -953,7 +964,18 @@ class StudentsController extends Controller
                 $Datacell = datacell::where('user_id', $user->id)
                     ->with(['user'])
                     ->first();
-                $session = session::where('id', (new session())->getCurrentSessionId())->first();
+                
+                if (!$Datacell) {
+                    throw new Exception('Datacell record not found for user_id: ' . $user->id);
+                }
+                
+                if (!$Datacell->user) {
+                    throw new Exception('User record not found for Datacell id: ' . $Datacell->id);
+                }
+                
+                $currentSessionId = (new session())->getCurrentSessionId();
+                $session = $currentSessionId ? session::where('id', $currentSessionId)->first() : null;
+                
                 $twoStepOtp = null;
                 if ($Datacell->user->email) {
                     $twoStepResponse = AuthenticationController::sendTwoStepVer($Datacell->user->id, $Datacell->user->email, $Datacell->name);
@@ -968,12 +990,12 @@ class StudentsController extends Controller
                     "Username" => $Datacell->user->username,
                     "Password" => $Datacell->user->password,
                     "user_id" => $Datacell->user->id,
-                    "Current Session" => (new session())->getSessionNameByID($session->id) ?? 'N/A',
-                    "Start Date" => $session->start_date ?? "N/A",
-                    "End Date" => $session->end_date ?? "N/A",
+                    "Current Session" => $session ? (new session())->getSessionNameByID($session->id) ?? 'N/A' : 'N/A',
+                    "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
+                    "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $Datacell->image ? asset($Datacell->image) : null,
                     "course_count" => course::count(),
-                    "offered_course_count" => offered_courses::where('session_id', (new session())->getCurrentSessionId())->count(),
+                    "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                 ];
@@ -990,6 +1012,15 @@ class StudentsController extends Controller
                 $jl = juniorlecturer::where('user_id', $user->id)
                     ->with(['user'])
                     ->first();
+                
+                if (!$jl) {
+                    throw new Exception('JuniorLecturer record not found for user_id: ' . $user->id);
+                }
+                
+                if (!$jl->user) {
+                    throw new Exception('User record not found for JuniorLecturer id: ' . $jl->id);
+                }
+                
                 $attribute = excluded_days::checkHoliday() ? 'Timetable' : 'Timetable';
                 $rescheduled = excluded_days::checkReschedule();
                 if ($rescheduled) {
@@ -1014,7 +1045,7 @@ class StudentsController extends Controller
                     "Date Of Birth" => $jl->date_of_birth,
                     "Username" => $jl->user->username,
                     "Password" => $jl->user->password,
-                    "email" => $teacher->user->email ?? null,
+                    "email" => $jl->user->email ?? null,
                     "week" => (new session())->getCurrentSessionWeek() ?? 0,
                     "Session" => (new session())->getSessionNameByID((new session())->getCurrentSessionId()) ?? 'No Session is Active',
                     $attribute => excluded_days::checkHoliday() ? [] : $timetable,
@@ -1038,7 +1069,18 @@ class StudentsController extends Controller
                 $HOD = Hod::where('user_id', $user->id)
                     ->with(['user'])
                     ->first();
-                $session = session::where('id', (new session())->getCurrentSessionId())->first();
+                
+                if (!$HOD) {
+                    throw new Exception('HOD record not found for user_id: ' . $user->id);
+                }
+                
+                if (!$HOD->user) {
+                    throw new Exception('User record not found for HOD id: ' . $HOD->id);
+                }
+                
+                $currentSessionId = (new session())->getCurrentSessionId();
+                $session = $currentSessionId ? session::where('id', $currentSessionId)->first() : null;
+                
                 $twoStepOtp = null;
                 if ($HOD->user->email) {
                     $twoStepResponse = AuthenticationController::sendTwoStepVer($HOD->user->id, $HOD->user->email, $HOD->name);
@@ -1054,12 +1096,12 @@ class StudentsController extends Controller
                     "Password" => $HOD->user->password,
                     "user_id" => $HOD->user->id,
                     "program_id" => $HOD->program_id,
-                    "Current Session" => (new session())->getSessionNameByID($session->id) ?? 'N/A',
-                    "Start Date" => $session->start_date ?? "N/A",
-                    "End Date" => $session->end_date ?? "N/A",
+                    "Current Session" => $session ? (new session())->getSessionNameByID($session->id) ?? 'N/A' : 'N/A',
+                    "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
+                    "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $HOD->image ? asset($HOD->image) : null,
                     "course_count" => course::count(),
-                    "offered_course_count" => offered_courses::where('session_id', (new session())->getCurrentSessionId())->count(),
+                    "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                     "Current_Week" => (new session())->getCurrentSessionWeek() ?? 0,
@@ -1077,13 +1119,24 @@ class StudentsController extends Controller
                 $HOD = Director::where('user_id', $user->id)
                     ->with(['user'])
                     ->first();
+                
+                if (!$HOD) {
+                    throw new Exception('Director record not found for user_id: ' . $user->id);
+                }
+                
+                if (!$HOD->user) {
+                    throw new Exception('User record not found for Director id: ' . $HOD->id);
+                }
+                
+                $currentSessionId = (new session())->getCurrentSessionId();
+                $session = $currentSessionId ? session::where('id', $currentSessionId)->first() : null;
+                
                 $twoStepOtp = null;
                 if ($HOD->user->email) {
                     $twoStepResponse = AuthenticationController::sendTwoStepVer($HOD->user->id, $HOD->user->email, $HOD->name);
                     $twoStepData = json_decode($twoStepResponse->getContent(), true);
                     $twoStepOtp = $twoStepData['otp'] ?? null;
                 }
-                $session = session::where('id', (new session())->getCurrentSessionId())->first();
                 $admin = [
                     "id" => $HOD->id,
                     "name" => $HOD->name,
@@ -1092,12 +1145,12 @@ class StudentsController extends Controller
                     "Password" => $HOD->user->password,
                     "user_id" => $HOD->user->id,
                     "Current_Week" => (new session())->getCurrentSessionWeek() ?? 0,
-                    "Current Session" => (new session())->getSessionNameByID($session->id) ?? 'N/A',
-                    "Start Date" => $session->start_date ?? "N/A",
-                    "End Date" => $session->end_date ?? "N/A",
+                    "Current Session" => $session ? (new session())->getSessionNameByID($session->id) ?? 'N/A' : 'N/A',
+                    "Start Date" => $session ? ($session->start_date ?? "N/A") : "N/A",
+                    "End Date" => $session ? ($session->end_date ?? "N/A") : "N/A",
                     "image" => $HOD->image ? asset($HOD->image) : null,
                     "course_count" => course::count(),
-                    "offered_course_count" => offered_courses::where('session_id', (new session())->getCurrentSessionId())->count(),
+                    "offered_course_count" => offered_courses::where('session_id', $currentSessionId)->count(),
                     "student_count" => student::count(),
                     "faculty_count" => teacher::count() + juniorlecturer::count(),
                 ];
